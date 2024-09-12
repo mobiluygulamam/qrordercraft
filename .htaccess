@@ -1,0 +1,30 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Tüm istekleri qrordercraft klasörüne yönlendirin
+    RewriteCond %{REQUEST_URI} !^/qrordercraft/
+    RewriteRule ^(.*)$ /qrordercraft/$1 [L]
+
+    # Eğer direkt qrordercraft klasörüne erişiliyorsa index.php'ye yönlendir
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ /qrordercraft/index.php [L]
+
+    <Files ~ "\.(env|config.js|md|gitignore|gitattributes|lock|htaccess)$">
+        Order allow,deny
+        Deny from all
+    </Files>
+</IfModule>
