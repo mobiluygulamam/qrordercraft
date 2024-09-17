@@ -837,4 +837,8 @@ return array (
   'provided_by_kabudigital' => 'Provided by Kabudigital',
   'new_order' => 'New Order',
   'submit_order' => 'Submit Order',
+  'header_sub_message' => 'Offer your customers a fast and unforgettable customized menu experience',
+  'get_started' => 'Get Started',
+  'create_an_menu_in_1min' => '50 saniye içinde menü oluşturun, satışlarınızı katlayın',
+
 );

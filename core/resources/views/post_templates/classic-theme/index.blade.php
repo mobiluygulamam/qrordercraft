@@ -46,9 +46,11 @@
                            
                                 <h3>{{$post->title}}  <span>{{$post->sub_title}}</span>
                                
+                                   @if (!is_null($getUserBusinessTable))                      
     <div class="m-0 tw-flex-2 bg-red-500 w-auto text-center rounded-md text-white"> 
         {{ ___("table") }} {{$getUserBusinessTable->table_id}}
     </div>
+@endif
 
                             </h3>
                             

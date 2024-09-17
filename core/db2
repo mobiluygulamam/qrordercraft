@@ -1,0 +1,1508 @@
+/*!999999\- enable the sandbox mode */ 
+-- MariaDB dump 10.19  Distrib 10.6.18-MariaDB, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: craftordermenu
+-- ------------------------------------------------------
+-- Server version	10.6.18-MariaDB-0ubuntu0.22.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `qr_adsense`
+--
+
+DROP TABLE IF EXISTS `qr_adsense`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_adsense` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `provider_name` varchar(255) DEFAULT NULL,
+  `slug` text DEFAULT NULL,
+  `code` text DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_adsense`
+--
+
+LOCK TABLES `qr_adsense` WRITE;
+/*!40000 ALTER TABLE `qr_adsense` DISABLE KEYS */;
+INSERT INTO `qr_adsense` VALUES (1,'Head Code','head_code','<script></script>',1),(2,'Top','top','<img src=\"https://via.placeholder.com/720x90\" width=\"100%\" height=\"100%\">',0),(3,'Bottom','bottom','<img src=\"https://via.placeholder.com/720x90\" width=\"100%\" height=\"100%\">',0),(4,'Home Page 1','home_page_1','<img src=\"https://via.placeholder.com/720x90\" width=\"100%\" height=\"100%\">',0),(5,'Home Page 2','home_page_2','<img src=\"https://via.placeholder.com/720x90\" width=\"100%\" height=\"100%\">',0),(12,'Dashboard Top','dashboard_top','<img src=\"https://via.placeholder.com/720x90\" width=\"100%\" height=\"100%\">',0),(13,'Dashboard Bottom','dashboard_bottom','<img src=\"https://via.placeholder.com/720x90\" width=\"100%\" height=\"100%\">',0);
+/*!40000 ALTER TABLE `qr_adsense` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_allergies`
+--
+
+DROP TABLE IF EXISTS `qr_allergies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_allergies` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `translations` longtext DEFAULT NULL,
+  `image` varchar(255) NOT NULL DEFAULT 'default.png',
+  `position` int(11) NOT NULL DEFAULT 0,
+  `active` enum('0','1') NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_allergies`
+--
+
+LOCK TABLES `qr_allergies` WRITE;
+/*!40000 ALTER TABLE `qr_allergies` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_allergies` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_blog`
+--
+
+DROP TABLE IF EXISTS `qr_blog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_blog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `author` int(11) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `tags` text DEFAULT NULL,
+  `status` enum('publish','pending') NOT NULL DEFAULT 'publish',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `author` (`author`),
+  CONSTRAINT `qr_blog_author_foreign` FOREIGN KEY (`author`) REFERENCES `qr_user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_blog`
+--
+
+LOCK TABLES `qr_blog` WRITE;
+/*!40000 ALTER TABLE `qr_blog` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_blog` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_blog_cat_relation`
+--
+
+DROP TABLE IF EXISTS `qr_blog_cat_relation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_blog_cat_relation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `blog_id` int(11) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `blog_id` (`blog_id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `qr_blog_cat_relation_blog_id_foreign` FOREIGN KEY (`blog_id`) REFERENCES `qr_blog` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `qr_blog_cat_relation_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `qr_blog_categories` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_blog_cat_relation`
+--
+
+LOCK TABLES `qr_blog_cat_relation` WRITE;
+/*!40000 ALTER TABLE `qr_blog_cat_relation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_blog_cat_relation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_blog_categories`
+--
+
+DROP TABLE IF EXISTS `qr_blog_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_blog_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) DEFAULT NULL,
+  `slug` varchar(50) DEFAULT NULL,
+  `position` int(11) NOT NULL DEFAULT 0,
+  `active` enum('0','1') NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_blog_categories`
+--
+
+LOCK TABLES `qr_blog_categories` WRITE;
+/*!40000 ALTER TABLE `qr_blog_categories` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_blog_categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_blog_comment`
+--
+
+DROP TABLE IF EXISTS `qr_blog_comment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_blog_comment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `blog_id` int(11) DEFAULT NULL,
+  `name` tinytext DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `comment` text NOT NULL,
+  `parent` int(11) NOT NULL DEFAULT 0,
+  `active` enum('0','1') NOT NULL DEFAULT '1' COMMENT '0:Deactive\n1:Active',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `blog_id` (`blog_id`),
+  CONSTRAINT `qr_blog_comment_blog_id_foreign` FOREIGN KEY (`blog_id`) REFERENCES `qr_blog` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `qr_blog_comment_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `qr_user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_blog_comment`
+--
+
+LOCK TABLES `qr_blog_comment` WRITE;
+/*!40000 ALTER TABLE `qr_blog_comment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_blog_comment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_countries`
+--
+
+DROP TABLE IF EXISTS `qr_countries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_countries` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(10) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `capital` varchar(100) DEFAULT NULL,
+  `continent` varchar(100) NOT NULL,
+  `continent_code` varchar(10) NOT NULL,
+  `phone` varchar(10) NOT NULL,
+  `currency` varchar(10) NOT NULL,
+  `symbol` varchar(10) NOT NULL,
+  `alpha_3` varchar(10) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=253 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_countries`
+--
+
+LOCK TABLES `qr_countries` WRITE;
+/*!40000 ALTER TABLE `qr_countries` DISABLE KEYS */;
+INSERT INTO `qr_countries` VALUES (1,'AF','Afghanistan','Kabul','Asia','AS','+93','AFN','؋','AFG','2021-11-04 00:37:15','2021-11-04 18:29:30'),(2,'AX','Aland Islands','Mariehamn','Europe','EU','+358','EUR','€','ALA','2021-11-04 00:37:15','2021-11-04 18:29:30'),(3,'AL','Albania','Tirana','Europe','EU','+355','ALL','Lek','ALB','2021-11-04 00:37:15','2021-11-04 18:29:30'),(4,'DZ','Algeria','Algiers','Africa','AF','+213','DZD','دج','DZA','2021-11-04 00:37:15','2021-11-04 18:29:30'),(5,'AS','American Samoa','Pago Pago','Oceania','OC','+1684','USD','$','ASM','2021-11-04 00:37:15','2021-11-04 18:29:30'),(6,'AD','Andorra','Andorra la Vella','Europe','EU','+376','EUR','€','AND','2021-11-04 00:37:15','2021-11-04 18:29:30'),(7,'AO','Angola','Luanda','Africa','AF','+244','AOA','Kz','AGO','2021-11-04 00:37:15','2021-11-04 18:29:30'),(8,'AI','Anguilla','The Valley','North America','NA','+1264','XCD','$','AIA','2021-11-04 00:37:15','2021-11-04 18:29:30'),(9,'AQ','Antarctica','Antarctica','Antarctica','AN','+672','AAD','$','ATA','2021-11-04 00:37:15','2021-11-04 18:29:30'),(10,'AG','Antigua and Barbuda','St. John\'s','North America','NA','+1268','XCD','$','ATG','2021-11-04 00:37:15','2021-11-04 18:29:30'),(11,'AR','Argentina','Buenos Aires','South America','SA','+54','ARS','$','ARG','2021-11-04 00:37:15','2021-11-04 18:29:30'),(12,'AM','Armenia','Yerevan','Asia','AS','+374','AMD','֏','ARM','2021-11-04 00:37:15','2021-11-04 18:29:30'),(13,'AW','Aruba','Oranjestad','North America','NA','+297','AWG','ƒ','ABW','2021-11-04 00:37:15','2021-11-04 18:29:30'),(14,'AU','Australia','Canberra','Oceania','OC','+61','AUD','$','AUS','2021-11-04 00:37:15','2021-11-04 18:29:30'),(15,'AT','Austria','Vienna','Europe','EU','+43','EUR','€','AUT','2021-11-04 00:37:15','2021-11-04 18:29:30'),(16,'AZ','Azerbaijan','Baku','Asia','AS','+994','AZN','m','AZE','2021-11-04 00:37:15','2021-11-04 18:29:30'),(17,'BS','Bahamas','Nassau','North America','NA','+1242','BSD','B$','BHS','2021-11-04 00:37:15','2021-11-04 18:29:30'),(18,'BH','Bahrain','Manama','Asia','AS','+973','BHD','.د.ب','BHR','2021-11-04 00:37:15','2021-11-04 18:29:30'),(19,'BD','Bangladesh','Dhaka','Asia','AS','+880','BDT','৳','BGD','2021-11-04 00:37:15','2021-11-04 18:29:30'),(20,'BB','Barbados','Bridgetown','North America','NA','+1246','BBD','Bds$','BRB','2021-11-04 00:37:15','2021-11-04 18:29:30'),(21,'BY','Belarus','Minsk','Europe','EU','+375','BYN','Br','BLR','2021-11-04 00:37:15','2021-11-04 18:29:30'),(22,'BE','Belgium','Brussels','Europe','EU','+32','EUR','€','BEL','2021-11-04 00:37:15','2021-11-04 18:29:30'),(23,'BZ','Belize','Belmopan','North America','NA','+501','BZD','$','BLZ','2021-11-04 00:37:15','2021-11-04 18:29:30'),(24,'BJ','Benin','Porto-Novo','Africa','AF','+229','XOF','CFA','BEN','2021-11-04 00:37:15','2021-11-04 18:29:30'),(25,'BM','Bermuda','Hamilton','North America','NA','+1441','BMD','$','BMU','2021-11-04 00:37:15','2021-11-04 18:29:30'),(26,'BT','Bhutan','Thimphu','Asia','AS','+975','BTN','Nu.','BTN','2021-11-04 00:37:15','2021-11-04 18:29:30'),(27,'BO','Bolivia','Sucre','South America','SA','+591','BOB','Bs.','BOL','2021-11-04 00:37:15','2021-11-04 18:29:30'),(28,'BQ','Bonaire, Sint Eustatius and Saba','Kralendijk','North America','NA','+599','USD','$','BES','2021-11-04 00:37:15','2021-11-04 18:29:30'),(29,'BA','Bosnia and Herzegovina','Sarajevo','Europe','EU','+387','BAM','KM','BIH','2021-11-04 00:37:15','2021-11-04 18:29:30'),(30,'BW','Botswana','Gaborone','Africa','AF','+267','BWP','P','BWA','2021-11-04 00:37:15','2021-11-04 18:29:30'),(31,'BV','Bouvet Island',NULL,'Antarctica','AN','+55','NOK','kr','BVT','2021-11-04 00:37:15','2021-11-04 18:29:30'),(32,'BR','Brazil','Brasilia','South America','SA','+55','BRL','R$','BRA','2021-11-04 00:37:15','2021-11-04 18:29:30'),(33,'IO','British Indian Ocean Territory','Diego Garcia','Asia','AS','+246','USD','$','IOT','2021-11-04 00:37:15','2021-11-04 18:29:30'),(34,'BN','Brunei Darussalam','Bandar Seri Begawan','Asia','AS','+673','BND','B$','BRN','2021-11-04 00:37:15','2021-11-04 18:29:30'),(35,'BG','Bulgaria','Sofia','Europe','EU','+359','BGN','Лв.','BGR','2021-11-04 00:37:15','2021-11-04 18:29:30'),(36,'BF','Burkina Faso','Ouagadougou','Africa','AF','+226','XOF','CFA','BFA','2021-11-04 00:37:15','2021-11-04 18:29:30'),(37,'BI','Burundi','Bujumbura','Africa','AF','+257','BIF','FBu','BDI','2021-11-04 00:37:15','2021-11-04 18:29:30'),(38,'KH','Cambodia','Phnom Penh','Asia','AS','+855','KHR','KHR','KHM','2021-11-04 00:37:15','2021-11-04 18:29:30'),(39,'CM','Cameroon','Yaounde','Africa','AF','+237','XAF','FCFA','CMR','2021-11-04 00:37:15','2021-11-04 18:29:30'),(40,'CA','Canada','Ottawa','North America','NA','+1','CAD','$','CAN','2021-11-04 00:37:15','2021-11-04 18:29:30'),(41,'CV','Cape Verde','Praia','Africa','AF','+238','CVE','$','CPV','2021-11-04 00:37:15','2021-11-04 18:29:30'),(42,'KY','Cayman Islands','George Town','North America','NA','+1345','KYD','$','CYM','2021-11-04 00:37:15','2021-11-04 18:29:30'),(43,'CF','Central African Republic','Bangui','Africa','AF','+236','XAF','FCFA','CAF','2021-11-04 00:37:15','2021-11-04 18:29:30'),(44,'TD','Chad','N\'Djamena','Africa','AF','+235','XAF','FCFA','TCD','2021-11-04 00:37:15','2021-11-04 18:29:30'),(45,'CL','Chile','Santiago','South America','SA','+56','CLP','$','CHL','2021-11-04 00:37:15','2021-11-04 18:29:30'),(46,'CN','China','Beijing','Asia','AS','+86','CNY','¥','CHN','2021-11-04 00:37:15','2021-11-04 18:29:30'),(47,'CX','Christmas Island','Flying Fish Cove','Asia','AS','+61','AUD','$','CXR','2021-11-04 00:37:15','2021-11-04 18:29:30'),(48,'CC','Cocos (Keeling) Islands','West Island','Asia','AS','+672','AUD','$','CCK','2021-11-04 00:37:15','2021-11-04 18:29:30'),(49,'CO','Colombia','Bogota','South America','SA','+57','COP','$','COL','2021-11-04 00:37:15','2021-11-04 18:29:30'),(50,'KM','Comoros','Moroni','Africa','AF','+269','KMF','CF','COM','2021-11-04 00:37:15','2021-11-04 18:29:30'),(51,'CG','Congo','Brazzaville','Africa','AF','+242','XAF','FC','COG','2021-11-04 00:37:15','2021-11-04 18:29:30'),(52,'CD','Congo, Democratic Republic of the Congo','Kinshasa','Africa','AF','+242','CDF','FC','COD','2021-11-04 00:37:15','2021-11-04 18:29:30'),(53,'CK','Cook Islands','Avarua','Oceania','OC','+682','NZD','$','COK','2021-11-04 00:37:15','2021-11-04 18:29:30'),(54,'CR','Costa Rica','San Jose','North America','NA','+506','CRC','₡','CRI','2021-11-04 00:37:15','2021-11-04 18:29:30'),(55,'CI','Cote D\'Ivoire','Yamoussoukro','Africa','AF','+225','XOF','CFA','CIV','2021-11-04 00:37:15','2021-11-04 18:29:30'),(56,'HR','Croatia','Zagreb','Europe','EU','+385','HRK','kn','HRV','2021-11-04 00:37:15','2021-11-04 18:29:30'),(57,'CU','Cuba','Havana','North America','NA','+53','CUP','$','CUB','2021-11-04 00:37:15','2021-11-04 18:29:30'),(58,'CW','Curacao','Willemstad','North America','NA','+599','ANG','ƒ','CUW','2021-11-04 00:37:15','2021-11-04 18:29:30'),(59,'CY','Cyprus','Nicosia','Asia','AS','+357','EUR','€','CYP','2021-11-04 00:37:15','2021-11-04 18:29:30'),(60,'CZ','Czech Republic','Prague','Europe','EU','+420','CZK','Kč','CZE','2021-11-04 00:37:15','2021-11-04 18:29:30'),(61,'DK','Denmark','Copenhagen','Europe','EU','+45','DKK','Kr.','DNK','2021-11-04 00:37:15','2021-11-04 18:29:30'),(62,'DJ','Djibouti','Djibouti','Africa','AF','+253','DJF','Fdj','DJI','2021-11-04 00:37:15','2021-11-04 18:29:30'),(63,'DM','Dominica','Roseau','North America','NA','+1767','XCD','$','DMA','2021-11-04 00:37:15','2021-11-04 18:29:30'),(64,'DO','Dominican Republic','Santo Domingo','North America','NA','+1809','DOP','$','DOM','2021-11-04 00:37:15','2021-11-04 18:29:30'),(65,'EC','Ecuador','Quito','South America','SA','+593','USD','$','ECU','2021-11-04 00:37:15','2021-11-04 18:29:30'),(66,'EG','Egypt','Cairo','Africa','AF','+20','EGP','ج.م','EGY','2021-11-04 00:37:15','2021-11-04 18:29:30'),(67,'SV','El Salvador','San Salvador','North America','NA','+503','USD','$','SLV','2021-11-04 00:37:15','2021-11-04 18:29:30'),(68,'GQ','Equatorial Guinea','Malabo','Africa','AF','+240','XAF','FCFA','GNQ','2021-11-04 00:37:15','2021-11-04 18:29:30'),(69,'ER','Eritrea','Asmara','Africa','AF','+291','ERN','Nfk','ERI','2021-11-04 00:37:15','2021-11-04 18:29:30'),(70,'EE','Estonia','Tallinn','Europe','EU','+372','EUR','€','EST','2021-11-04 00:37:15','2021-11-04 18:29:30'),(71,'ET','Ethiopia','Addis Ababa','Africa','AF','+251','ETB','Nkf','ETH','2021-11-04 00:37:15','2021-11-04 18:29:30'),(72,'FK','Falkland Islands (Malvinas)','Stanley','South America','SA','+500','FKP','£','FLK','2021-11-04 00:37:15','2021-11-04 18:29:30'),(73,'FO','Faroe Islands','Torshavn','Europe','EU','+298','DKK','Kr.','FRO','2021-11-04 00:37:15','2021-11-04 18:29:30'),(74,'FJ','Fiji','Suva','Oceania','OC','+679','FJD','FJ$','FJI','2021-11-04 00:37:15','2021-11-04 18:29:30'),(75,'FI','Finland','Helsinki','Europe','EU','+358','EUR','€','FIN','2021-11-04 00:37:15','2021-11-04 18:29:30'),(76,'FR','France','Paris','Europe','EU','+33','EUR','€','FRA','2021-11-04 00:37:15','2021-11-04 18:29:30'),(77,'GF','French Guiana','Cayenne','South America','SA','+594','EUR','€','GUF','2021-11-04 00:37:15','2021-11-04 18:29:30'),(78,'PF','French Polynesia','Papeete','Oceania','OC','+689','XPF','₣','PYF','2021-11-04 00:37:15','2021-11-04 18:29:30'),(79,'TF','French Southern Territories','Port-aux-Francais','Antarctica','AN','+262','EUR','€','ATF','2021-11-04 00:37:15','2021-11-04 18:29:30'),(80,'GA','Gabon','Libreville','Africa','AF','+241','XAF','FCFA','GAB','2021-11-04 00:37:15','2021-11-04 18:29:30'),(81,'GM','Gambia','Banjul','Africa','AF','+220','GMD','D','GMB','2021-11-04 00:37:15','2021-11-04 18:29:30'),(82,'GE','Georgia','Tbilisi','Asia','AS','+995','GEL','ლ','GEO','2021-11-04 00:37:15','2021-11-04 18:29:30'),(83,'DE','Germany','Berlin','Europe','EU','+49','EUR','€','DEU','2021-11-04 00:37:15','2021-11-04 18:29:30'),(84,'GH','Ghana','Accra','Africa','AF','+233','GHS','GH₵','GHA','2021-11-04 00:37:15','2021-11-04 18:29:30'),(85,'GI','Gibraltar','Gibraltar','Europe','EU','+350','GIP','£','GIB','2021-11-04 00:37:15','2021-11-04 18:29:30'),(86,'GR','Greece','Athens','Europe','EU','+30','EUR','€','GRC','2021-11-04 00:37:15','2021-11-04 18:29:30'),(87,'GL','Greenland','Nuuk','North America','NA','+299','DKK','Kr.','GRL','2021-11-04 00:37:15','2021-11-04 18:29:30'),(88,'GD','Grenada','St. George\'s','North America','NA','+1473','XCD','$','GRD','2021-11-04 00:37:15','2021-11-04 18:29:30'),(89,'GP','Guadeloupe','Basse-Terre','North America','NA','+590','EUR','€','GLP','2021-11-04 00:37:15','2021-11-04 18:29:30'),(90,'GU','Guam','Hagatna','Oceania','OC','+1671','USD','$','GUM','2021-11-04 00:37:15','2021-11-04 18:29:30'),(91,'GT','Guatemala','Guatemala City','North America','NA','+502','GTQ','Q','GTM','2021-11-04 00:37:15','2021-11-04 18:29:30'),(92,'GG','Guernsey','St Peter Port','Europe','EU','+44','GBP','£','GGY','2021-11-04 00:37:15','2021-11-04 18:29:30'),(93,'GN','Guinea','Conakry','Africa','AF','+224','GNF','FG','GIN','2021-11-04 00:37:15','2021-11-04 18:29:30'),(94,'GW','Guinea-Bissau','Bissau','Africa','AF','+245','XOF','CFA','GNB','2021-11-04 00:37:15','2021-11-04 18:29:30'),(95,'GY','Guyana','Georgetown','South America','SA','+592','GYD','$','GUY','2021-11-04 00:37:15','2021-11-04 18:29:30'),(96,'HT','Haiti','Port-au-Prince','North America','NA','+509','HTG','G','HTI','2021-11-04 00:37:15','2021-11-04 18:29:30'),(97,'HM','Heard Island and Mcdonald Islands','','Antarctica','AN','+0','AUD','$','HMD','2021-11-04 00:37:15','2021-11-04 18:29:30'),(98,'VA','Holy See (Vatican City State)','Vatican City','Europe','EU','+39','EUR','€','VAT','2021-11-04 00:37:15','2021-11-04 18:29:30'),(99,'HN','Honduras','Tegucigalpa','North America','NA','+504','HNL','L','HND','2021-11-04 00:37:15','2021-11-04 18:29:30'),(100,'HK','Hong Kong','Hong Kong','Asia','AS','+852','HKD','$','HKG','2021-11-04 00:37:15','2021-11-04 18:29:30'),(101,'HU','Hungary','Budapest','Europe','EU','+36','HUF','Ft','HUN','2021-11-04 00:37:15','2021-11-04 18:29:30'),(102,'IS','Iceland','Reykjavik','Europe','EU','+354','ISK','kr','ISL','2021-11-04 00:37:15','2021-11-04 18:29:30'),(103,'IN','India','New Delhi','Asia','AS','+91','INR','₹','IND','2021-11-04 00:37:15','2021-11-04 18:29:30'),(104,'ID','Indonesia','Jakarta','Asia','AS','+62','IDR','Rp','IDN','2021-11-04 00:37:15','2021-11-04 18:29:30'),(105,'IR','Iran, Islamic Republic of','Tehran','Asia','AS','+98','IRR','﷼','IRN','2021-11-04 00:37:15','2021-11-04 18:29:30'),(106,'IQ','Iraq','Baghdad','Asia','AS','+964','IQD','د.ع','IRQ','2021-11-04 00:37:15','2021-11-04 18:29:30'),(107,'IE','Ireland','Dublin','Europe','EU','+353','EUR','€','IRL','2021-11-04 00:37:15','2021-11-04 18:29:30'),(108,'IM','Isle of Man','Douglas, Isle of Man','Europe','EU','+44','GBP','£','IMN','2021-11-04 00:37:15','2021-11-04 18:29:30'),(109,'IL','Israel','Jerusalem','Asia','AS','+972','ILS','₪','ISR','2021-11-04 00:37:15','2021-11-04 18:29:30'),(110,'IT','Italy','Rome','Europe','EU','+39','EUR','€','ITA','2021-11-04 00:37:15','2021-11-04 18:29:30'),(111,'JM','Jamaica','Kingston','North America','NA','+1876','JMD','J$','JAM','2021-11-04 00:37:15','2021-11-04 18:29:30'),(112,'JP','Japan','Tokyo','Asia','AS','+81','JPY','¥','JPN','2021-11-04 00:37:15','2021-11-04 18:29:30'),(113,'JE','Jersey','Saint Helier','Europe','EU','+44','GBP','£','JEY','2021-11-04 00:37:15','2021-11-04 18:29:30'),(114,'JO','Jordan','Amman','Asia','AS','+962','JOD','ا.د','JOR','2021-11-04 00:37:15','2021-11-04 18:29:30'),(115,'KZ','Kazakhstan','Astana','Asia','AS','+7','KZT','лв','KAZ','2021-11-04 00:37:15','2021-11-04 18:29:30'),(116,'KE','Kenya','Nairobi','Africa','AF','+254','KES','KSh','KEN','2021-11-04 00:37:16','2021-11-04 18:29:30'),(117,'KI','Kiribati','Tarawa','Oceania','OC','+686','AUD','$','KIR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(118,'KP','Korea, Democratic People\'s Republic of','Pyongyang','Asia','AS','+850','KPW','₩','PRK','2021-11-04 00:37:16','2021-11-04 18:29:30'),(119,'KR','Korea, Republic of','Seoul','Asia','AS','+82','KRW','₩','KOR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(120,'XK','Kosovo','Pristina','Europe','EU','+381','EUR','€','XKX','2021-11-04 00:37:16','2021-11-04 18:29:30'),(121,'KW','Kuwait','Kuwait City','Asia','AS','+965','KWD','ك.د','KWT','2021-11-04 00:37:16','2021-11-04 18:29:30'),(122,'KG','Kyrgyzstan','Bishkek','Asia','AS','+996','KGS','лв','KGZ','2021-11-04 00:37:16','2021-11-04 18:29:30'),(123,'LA','Lao People\'s Democratic Republic','Vientiane','Asia','AS','+856','LAK','₭','LAO','2021-11-04 00:37:16','2021-11-04 18:29:30'),(124,'LV','Latvia','Riga','Europe','EU','+371','EUR','€','LVA','2021-11-04 00:37:16','2021-11-04 18:29:30'),(125,'LB','Lebanon','Beirut','Asia','AS','+961','LBP','£','LBN','2021-11-04 00:37:16','2021-11-04 18:29:30'),(126,'LS','Lesotho','Maseru','Africa','AF','+266','LSL','L','LSO','2021-11-04 00:37:16','2021-11-04 18:29:30'),(127,'LR','Liberia','Monrovia','Africa','AF','+231','LRD','$','LBR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(128,'LY','Libyan Arab Jamahiriya','Tripolis','Africa','AF','+218','LYD','د.ل','LBY','2021-11-04 00:37:16','2021-11-04 18:29:30'),(129,'LI','Liechtenstein','Vaduz','Europe','EU','+423','CHF','CHf','LIE','2021-11-04 00:37:16','2021-11-04 18:29:30'),(130,'LT','Lithuania','Vilnius','Europe','EU','+370','EUR','€','LTU','2021-11-04 00:37:16','2021-11-04 18:29:30'),(131,'LU','Luxembourg','Luxembourg','Europe','EU','+352','EUR','€','LUX','2021-11-04 00:37:16','2021-11-04 18:29:30'),(132,'MO','Macao','Macao','Asia','AS','+853','MOP','$','MAC','2021-11-04 00:37:16','2021-11-04 18:29:30'),(133,'MK','Macedonia, the Former Yugoslav Republic of','Skopje','Europe','EU','+389','MKD','ден','MKD','2021-11-04 00:37:16','2021-11-04 18:29:30'),(134,'MG','Madagascar','Antananarivo','Africa','AF','+261','MGA','Ar','MDG','2021-11-04 00:37:16','2021-11-04 18:29:30'),(135,'MW','Malawi','Lilongwe','Africa','AF','+265','MWK','MK','MWI','2021-11-04 00:37:16','2021-11-04 18:29:30'),(136,'MY','Malaysia','Kuala Lumpur','Asia','AS','+60','MYR','RM','MYS','2021-11-04 00:37:16','2021-11-04 18:29:30'),(137,'MV','Maldives','Male','Asia','AS','+960','MVR','Rf','MDV','2021-11-04 00:37:16','2021-11-04 18:29:30'),(138,'ML','Mali','Bamako','Africa','AF','+223','XOF','CFA','MLI','2021-11-04 00:37:16','2021-11-04 18:29:30'),(139,'MT','Malta','Valletta','Europe','EU','+356','EUR','€','MLT','2021-11-04 00:37:16','2021-11-04 18:29:30'),(140,'MH','Marshall Islands','Majuro','Oceania','OC','+692','USD','$','MHL','2021-11-04 00:37:16','2021-11-04 18:29:30'),(141,'MQ','Martinique','Fort-de-France','North America','NA','+596','EUR','€','MTQ','2021-11-04 00:37:16','2021-11-04 18:29:30'),(142,'MR','Mauritania','Nouakchott','Africa','AF','+222','MRO','MRU','MRT','2021-11-04 00:37:16','2021-11-04 18:29:30'),(143,'MU','Mauritius','Port Louis','Africa','AF','+230','MUR','₨','MUS','2021-11-04 00:37:16','2021-11-04 18:29:30'),(144,'YT','Mayotte','Mamoudzou','Africa','AF','+269','EUR','€','MYT','2021-11-04 00:37:16','2021-11-04 18:29:30'),(145,'MX','Mexico','Mexico City','North America','NA','+52','MXN','$','MEX','2021-11-04 00:37:16','2021-11-04 18:29:30'),(146,'FM','Micronesia, Federated States of','Palikir','Oceania','OC','+691','USD','$','FSM','2021-11-04 00:37:16','2021-11-04 18:29:30'),(147,'MD','Moldova, Republic of','Chisinau','Europe','EU','+373','MDL','L','MDA','2021-11-04 00:37:16','2021-11-04 18:29:30'),(148,'MC','Monaco','Monaco','Europe','EU','+377','EUR','€','MCO','2021-11-04 00:37:16','2021-11-04 18:29:30'),(149,'MN','Mongolia','Ulan Bator','Asia','AS','+976','MNT','₮','MNG','2021-11-04 00:37:16','2021-11-04 18:29:30'),(150,'ME','Montenegro','Podgorica','Europe','EU','+382','EUR','€','MNE','2021-11-04 00:37:16','2021-11-04 18:29:30'),(151,'MS','Montserrat','Plymouth','North America','NA','+1664','XCD','$','MSR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(152,'MA','Morocco','Rabat','Africa','AF','+212','MAD','DH','MAR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(153,'MZ','Mozambique','Maputo','Africa','AF','+258','MZN','MT','MOZ','2021-11-04 00:37:16','2021-11-04 18:29:30'),(154,'MM','Myanmar','Nay Pyi Taw','Asia','AS','+95','MMK','K','MMR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(155,'NA','Namibia','Windhoek','Africa','AF','+264','NAD','$','NAM','2021-11-04 00:37:16','2021-11-04 18:29:30'),(156,'NR','Nauru','Yaren','Oceania','OC','+674','AUD','$','NRU','2021-11-04 00:37:16','2021-11-04 18:29:30'),(157,'NP','Nepal','Kathmandu','Asia','AS','+977','NPR','₨','NPL','2021-11-04 00:37:16','2021-11-04 18:29:30'),(158,'NL','Netherlands','Amsterdam','Europe','EU','+31','EUR','€','NLD','2021-11-04 00:37:16','2021-11-04 18:29:30'),(159,'AN','Netherlands Antilles','Willemstad','North America','NA','+599','ANG','NAf','ANT','2021-11-04 00:37:16','2021-11-04 18:29:30'),(160,'NC','New Caledonia','Noumea','Oceania','OC','+687','XPF','₣','NCL','2021-11-04 00:37:16','2021-11-04 18:29:30'),(161,'NZ','New Zealand','Wellington','Oceania','OC','+64','NZD','$','NZL','2021-11-04 00:37:16','2021-11-04 18:29:30'),(162,'NI','Nicaragua','Managua','North America','NA','+505','NIO','C$','NIC','2021-11-04 00:37:16','2021-11-04 18:29:30'),(163,'NE','Niger','Niamey','Africa','AF','+227','XOF','CFA','NER','2021-11-04 00:37:16','2021-11-04 18:29:30'),(164,'NG','Nigeria','Abuja','Africa','AF','+234','NGN','₦','NGA','2021-11-04 00:37:16','2021-11-04 18:29:30'),(165,'NU','Niue','Alofi','Oceania','OC','+683','NZD','$','NIU','2021-11-04 00:37:16','2021-11-04 18:29:30'),(166,'NF','Norfolk Island','Kingston','Oceania','OC','+672','AUD','$','NFK','2021-11-04 00:37:16','2021-11-04 18:29:30'),(167,'MP','Northern Mariana Islands','Saipan','Oceania','OC','+1670','USD','$','MNP','2021-11-04 00:37:16','2021-11-04 18:29:30'),(168,'NO','Norway','Oslo','Europe','EU','+47','NOK','kr','NOR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(169,'OM','Oman','Muscat','Asia','AS','+968','OMR','.ع.ر','OMN','2021-11-04 00:37:16','2021-11-04 18:29:30'),(170,'PK','Pakistan','Islamabad','Asia','AS','+92','PKR','₨','PAK','2021-11-04 00:37:16','2021-11-04 18:29:30'),(171,'PW','Palau','Melekeok','Oceania','OC','+680','USD','$','PLW','2021-11-04 00:37:16','2021-11-04 18:29:30'),(172,'PS','Palestinian Territory, Occupied','East Jerusalem','Asia','AS','+970','ILS','₪','PSE','2021-11-04 00:37:16','2021-11-04 18:29:30'),(173,'PA','Panama','Panama City','North America','NA','+507','PAB','B/.','PAN','2021-11-04 00:37:16','2021-11-04 18:29:30'),(174,'PG','Papua New Guinea','Port Moresby','Oceania','OC','+675','PGK','K','PNG','2021-11-04 00:37:16','2021-11-04 18:29:30'),(175,'PY','Paraguay','Asuncion','South America','SA','+595','PYG','₲','PRY','2021-11-04 00:37:16','2021-11-04 18:29:30'),(176,'PE','Peru','Lima','South America','SA','+51','PEN','S/.','PER','2021-11-04 00:37:16','2021-11-04 18:29:30'),(177,'PH','Philippines','Manila','Asia','AS','+63','PHP','₱','PHL','2021-11-04 00:37:16','2021-11-04 18:29:30'),(178,'PN','Pitcairn','Adamstown','Oceania','OC','+64','NZD','$','PCN','2021-11-04 00:37:16','2021-11-04 18:29:30'),(179,'PL','Poland','Warsaw','Europe','EU','+48','PLN','zł','POL','2021-11-04 00:37:16','2021-11-04 18:29:30'),(180,'PT','Portugal','Lisbon','Europe','EU','+351','EUR','€','PRT','2021-11-04 00:37:16','2021-11-04 18:29:30'),(181,'PR','Puerto Rico','San Juan','North America','NA','+1787','USD','$','PRI','2021-11-04 00:37:16','2021-11-04 18:29:30'),(182,'QA','Qatar','Doha','Asia','AS','+974','QAR','ق.ر','QAT','2021-11-04 00:37:16','2021-11-04 18:29:30'),(183,'RE','Reunion','Saint-Denis','Africa','AF','+262','EUR','€','REU','2021-11-04 00:37:16','2021-11-04 18:29:30'),(184,'RO','Romania','Bucharest','Europe','EU','+40','RON','lei','ROM','2021-11-04 00:37:16','2021-11-04 18:29:30'),(185,'RU','Russian Federation','Moscow','Asia','AS','+70','RUB','₽','RUS','2021-11-04 00:37:16','2021-11-04 18:29:30'),(186,'RW','Rwanda','Kigali','Africa','AF','+250','RWF','FRw','RWA','2021-11-04 00:37:16','2021-11-04 18:29:30'),(187,'BL','Saint Barthelemy','Gustavia','North America','NA','+590','EUR','€','BLM','2021-11-04 00:37:16','2021-11-04 18:29:30'),(188,'SH','Saint Helena','Jamestown','Africa','AF','+290','SHP','£','SHN','2021-11-04 00:37:16','2021-11-04 18:29:30'),(189,'KN','Saint Kitts and Nevis','Basseterre','North America','NA','+1869','XCD','$','KNA','2021-11-04 00:37:16','2021-11-04 18:29:30'),(190,'LC','Saint Lucia','Castries','North America','NA','+1758','XCD','$','LCA','2021-11-04 00:37:16','2021-11-04 18:29:30'),(191,'MF','Saint Martin','Marigot','North America','NA','+590','EUR','€','MAF','2021-11-04 00:37:16','2021-11-04 18:29:30'),(192,'PM','Saint Pierre and Miquelon','Saint-Pierre','North America','NA','+508','EUR','€','SPM','2021-11-04 00:37:16','2021-11-04 18:29:30'),(193,'VC','Saint Vincent and the Grenadines','Kingstown','North America','NA','+1784','XCD','$','VCT','2021-11-04 00:37:16','2021-11-04 18:29:30'),(194,'WS','Samoa','Apia','Oceania','OC','+684','WST','SAT','WSM','2021-11-04 00:37:16','2021-11-04 18:29:30'),(195,'SM','San Marino','San Marino','Europe','EU','+378','EUR','€','SMR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(196,'ST','Sao Tome and Principe','Sao Tome','Africa','AF','+239','STD','Db','STP','2021-11-04 00:37:16','2021-11-04 18:29:30'),(197,'SA','Saudi Arabia','Riyadh','Asia','AS','+966','SAR','﷼','SAU','2021-11-04 00:37:16','2021-11-04 18:29:30'),(198,'SN','Senegal','Dakar','Africa','AF','+221','XOF','CFA','SEN','2021-11-04 00:37:16','2021-11-04 18:29:30'),(199,'RS','Serbia','Belgrade','Europe','EU','+381','RSD','din','SRB','2021-11-04 00:37:16','2021-11-04 18:29:30'),(200,'CS','Serbia and Montenegro','Belgrade','Europe','EU','+381','RSD','din','SCG','2021-11-04 00:37:16','2021-11-04 18:29:30'),(201,'SC','Seychelles','Victoria','Africa','AF','+248','SCR','SRe','SYC','2021-11-04 00:37:16','2021-11-04 18:29:30'),(202,'SL','Sierra Leone','Freetown','Africa','AF','+232','SLL','Le','SLE','2021-11-04 00:37:16','2021-11-04 18:29:30'),(203,'SG','Singapore','Singapur','Asia','AS','+65','SGD','$','SGP','2021-11-04 00:37:16','2021-11-04 18:29:30'),(204,'SX','Sint Maarten','Philipsburg','North America','NA','+1','ANG','ƒ','SXM','2021-11-04 00:37:16','2021-11-04 18:29:30'),(205,'SK','Slovakia','Bratislava','Europe','EU','+421','EUR','€','SVK','2021-11-04 00:37:16','2021-11-04 18:29:30'),(206,'SI','Slovenia','Ljubljana','Europe','EU','+386','EUR','€','SVN','2021-11-04 00:37:16','2021-11-04 18:29:30'),(207,'SB','Solomon Islands','Honiara','Oceania','OC','+677','SBD','Si$','SLB','2021-11-04 00:37:16','2021-11-04 18:29:30'),(208,'SO','Somalia','Mogadishu','Africa','AF','+252','SOS','Sh.so.','SOM','2021-11-04 00:37:16','2021-11-04 18:29:30'),(209,'ZA','South Africa','Pretoria','Africa','AF','+27','ZAR','R','ZAF','2021-11-04 00:37:16','2021-11-04 18:29:30'),(210,'GS','South Georgia and the South Sandwich Islands','Grytviken','Antarctica','AN','+500','GBP','£','SGS','2021-11-04 00:37:16','2021-11-04 18:29:30'),(211,'SS','South Sudan','Juba','Africa','AF','+211','SSP','£','SSD','2021-11-04 00:37:16','2021-11-04 18:29:30'),(212,'ES','Spain','Madrid','Europe','EU','+34','EUR','€','ESP','2021-11-04 00:37:16','2021-11-04 18:29:30'),(213,'LK','Sri Lanka','Colombo','Asia','AS','+94','LKR','Rs','LKA','2021-11-04 00:37:16','2021-11-04 18:29:30'),(214,'SD','Sudan','Khartoum','Africa','AF','+249','SDG','.س.ج','SDN','2021-11-04 00:37:16','2021-11-04 18:29:30'),(215,'SR','Suriname','Paramaribo','South America','SA','+597','SRD','$','SUR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(216,'SJ','Svalbard and Jan Mayen','Longyearbyen','Europe','EU','+47','NOK','kr','SJM','2021-11-04 00:37:16','2021-11-04 18:29:30'),(217,'SZ','Swaziland','Mbabane','Africa','AF','+268','SZL','E','SWZ','2021-11-04 00:37:16','2021-11-04 18:29:30'),(218,'SE','Sweden','Stockholm','Europe','EU','+46','SEK','kr','SWE','2021-11-04 00:37:16','2021-11-04 18:29:30'),(219,'CH','Switzerland','Berne','Europe','EU','+41','CHF','CHf','CHE','2021-11-04 00:37:16','2021-11-04 18:29:30'),(220,'SY','Syrian Arab Republic','Damascus','Asia','AS','+963','SYP','LS','SYR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(221,'TW','Taiwan, Province of China','Taipei','Asia','AS','+886','TWD','$','TWN','2021-11-04 00:37:16','2021-11-04 18:29:30'),(222,'TJ','Tajikistan','Dushanbe','Asia','AS','+992','TJS','SM','TJK','2021-11-04 00:37:16','2021-11-04 18:29:30'),(223,'TZ','Tanzania, United Republic of','Dodoma','Africa','AF','+255','TZS','TSh','TZA','2021-11-04 00:37:16','2021-11-04 18:29:30'),(224,'TH','Thailand','Bangkok','Asia','AS','+66','THB','฿','THA','2021-11-04 00:37:16','2021-11-04 18:29:30'),(225,'TL','Timor-Leste','Dili','Asia','AS','+670','USD','$','TLS','2021-11-04 00:37:16','2021-11-04 18:29:30'),(226,'TG','Togo','Lome','Africa','AF','+228','XOF','CFA','TGO','2021-11-04 00:37:16','2021-11-04 18:29:30'),(227,'TK','Tokelau',NULL,'Oceania','OC','+690','NZD','$','TKL','2021-11-04 00:37:16','2021-11-04 18:29:30'),(228,'TO','Tonga','Nuku\'alofa','Oceania','OC','+676','TOP','$','TON','2021-11-04 00:37:16','2021-11-04 18:29:30'),(229,'TT','Trinidad and Tobago','Port of Spain','North America','NA','+1868','TTD','$','TTO','2021-11-04 00:37:16','2021-11-04 18:29:30'),(230,'TN','Tunisia','Tunis','Africa','AF','+216','TND','ت.د','TUN','2021-11-04 00:37:16','2021-11-04 18:29:30'),(231,'TR','Turkey','Ankara','Asia','AS','+90','TRY','₺','TUR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(232,'TM','Turkmenistan','Ashgabat','Asia','AS','+7370','TMT','T','TKM','2021-11-04 00:37:16','2021-11-04 18:29:30'),(233,'TC','Turks and Caicos Islands','Cockburn Town','North America','NA','+1649','USD','$','TCA','2021-11-04 00:37:16','2021-11-04 18:29:30'),(234,'TV','Tuvalu','Funafuti','Oceania','OC','+688','AUD','$','TUV','2021-11-04 00:37:16','2021-11-04 18:29:30'),(235,'UG','Uganda','Kampala','Africa','AF','+256','UGX','USh','UGA','2021-11-04 00:37:16','2021-11-04 18:29:30'),(236,'UA','Ukraine','Kiev','Europe','EU','+380','UAH','₴','UKR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(237,'AE','United Arab Emirates','Abu Dhabi','Asia','AS','+971','AED','إ.د','ARE','2021-11-04 00:37:16','2021-11-04 18:29:30'),(238,'GB','United Kingdom','London','Europe','EU','+44','GBP','£','GBR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(239,'US','United States','Washington','North America','NA','+1','USD','$','USA','2021-11-04 00:37:16','2021-11-04 18:29:30'),(240,'UM','United States Minor Outlying Islands',NULL,'North America','NA','+1','USD','$','UMI','2021-11-04 00:37:16','2021-11-04 18:29:30'),(241,'UY','Uruguay','Montevideo','South America','SA','+598','UYU','$','URY','2021-11-04 00:37:16','2021-11-04 18:29:30'),(242,'UZ','Uzbekistan','Tashkent','Asia','AS','+998','UZS','лв','UZB','2021-11-04 00:37:16','2021-11-04 18:29:30'),(243,'VU','Vanuatu','Port Vila','Oceania','OC','+678','VUV','VT','VUT','2021-11-04 00:37:16','2021-11-04 18:29:30'),(244,'VE','Venezuela','Caracas','South America','SA','+58','VEF','Bs','VEN','2021-11-04 00:37:16','2021-11-04 18:29:30'),(245,'VN','Viet Nam','Hanoi','Asia','AS','+84','VND','₫','VNM','2021-11-04 00:37:16','2021-11-04 18:29:30'),(246,'VG','Virgin Islands, British','Road Town','North America','NA','+1284','USD','$','VGB','2021-11-04 00:37:16','2021-11-04 18:29:30'),(247,'VI','Virgin Islands, U.s.','Charlotte Amalie','North America','NA','+1340','USD','$','VIR','2021-11-04 00:37:16','2021-11-04 18:29:30'),(248,'WF','Wallis and Futuna','Mata Utu','Oceania','OC','+681','XPF','₣','WLF','2021-11-04 00:37:16','2021-11-04 18:29:30'),(249,'EH','Western Sahara','El-Aaiun','Africa','AF','+212','MAD','MAD','ESH','2021-11-04 00:37:16','2021-11-04 18:29:30'),(250,'YE','Yemen','Sanaa','Asia','AS','+967','YER','﷼','YEM','2021-11-04 00:37:16','2021-11-04 18:29:30'),(251,'ZM','Zambia','Lusaka','Africa','AF','+260','ZMW','ZK','ZMB','2021-11-04 00:37:16','2021-11-04 18:29:30'),(252,'ZW','Zimbabwe','Harare','Africa','AF','+263','ZWL','$','ZWE','2021-11-04 00:37:16','2021-11-04 18:29:30');
+/*!40000 ALTER TABLE `qr_countries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_coupons`
+--
+
+DROP TABLE IF EXISTS `qr_coupons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_coupons` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(20) NOT NULL,
+  `percentage` bigint(20) NOT NULL DEFAULT 1,
+  `limit` bigint(20) NOT NULL DEFAULT 1,
+  `used` bigint(20) NOT NULL DEFAULT 0,
+  `expiry_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `coupons_code_unique` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_coupons`
+--
+
+LOCK TABLES `qr_coupons` WRITE;
+/*!40000 ALTER TABLE `qr_coupons` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_coupons` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_device_users`
+--
+
+DROP TABLE IF EXISTS `qr_device_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_device_users` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `device_id` char(36) NOT NULL,
+  `last_active_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `qr_device_users_device_id_unique` (`device_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_device_users`
+--
+
+LOCK TABLES `qr_device_users` WRITE;
+/*!40000 ALTER TABLE `qr_device_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_device_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_faq_entries`
+--
+
+DROP TABLE IF EXISTS `qr_faq_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_faq_entries` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `faq_title` varchar(255) DEFAULT NULL,
+  `faq_content` mediumtext DEFAULT NULL,
+  `translation_lang` varchar(10) DEFAULT NULL,
+  `active` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`id`),
+  KEY `translation_lang` (`translation_lang`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_faq_entries`
+--
+
+LOCK TABLES `qr_faq_entries` WRITE;
+/*!40000 ALTER TABLE `qr_faq_entries` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_faq_entries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_feedback_categories`
+--
+
+DROP TABLE IF EXISTS `qr_feedback_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_feedback_categories` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_feedback_categories`
+--
+
+LOCK TABLES `qr_feedback_categories` WRITE;
+/*!40000 ALTER TABLE `qr_feedback_categories` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_feedback_categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_feedback_category_pivot`
+--
+
+DROP TABLE IF EXISTS `qr_feedback_category_pivot`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_feedback_category_pivot` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `feedback_id` bigint(20) unsigned NOT NULL,
+  `category_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `qr_feedback_category_pivot_feedback_id_foreign` (`feedback_id`),
+  KEY `qr_feedback_category_pivot_category_id_foreign` (`category_id`),
+  CONSTRAINT `qr_feedback_category_pivot_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `qr_feedback_categories` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `qr_feedback_category_pivot_feedback_id_foreign` FOREIGN KEY (`feedback_id`) REFERENCES `qr_feedbacks` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_feedback_category_pivot`
+--
+
+LOCK TABLES `qr_feedback_category_pivot` WRITE;
+/*!40000 ALTER TABLE `qr_feedback_category_pivot` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_feedback_category_pivot` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_feedback_responses`
+--
+
+DROP TABLE IF EXISTS `qr_feedback_responses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_feedback_responses` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `feedback_id` bigint(20) unsigned NOT NULL,
+  `response` text NOT NULL,
+  `responded_by` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `qr_feedback_responses_feedback_id_foreign` (`feedback_id`),
+  CONSTRAINT `qr_feedback_responses_feedback_id_foreign` FOREIGN KEY (`feedback_id`) REFERENCES `qr_feedbacks` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_feedback_responses`
+--
+
+LOCK TABLES `qr_feedback_responses` WRITE;
+/*!40000 ALTER TABLE `qr_feedback_responses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_feedback_responses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_feedback_statuses`
+--
+
+DROP TABLE IF EXISTS `qr_feedback_statuses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_feedback_statuses` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `feedback_id` bigint(20) unsigned NOT NULL,
+  `status` enum('pending','in_review','resolved') NOT NULL DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `qr_feedback_statuses_feedback_id_foreign` (`feedback_id`),
+  CONSTRAINT `qr_feedback_statuses_feedback_id_foreign` FOREIGN KEY (`feedback_id`) REFERENCES `qr_feedbacks` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_feedback_statuses`
+--
+
+LOCK TABLES `qr_feedback_statuses` WRITE;
+/*!40000 ALTER TABLE `qr_feedback_statuses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_feedback_statuses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_feedbacks`
+--
+
+DROP TABLE IF EXISTS `qr_feedbacks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_feedbacks` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `restaurant_id` bigint(20) unsigned NOT NULL,
+  `table_id` bigint(20) unsigned DEFAULT NULL,
+  `order_id` bigint(20) unsigned DEFAULT NULL,
+  `rating` tinyint(3) unsigned NOT NULL,
+  `comment` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_feedbacks`
+--
+
+LOCK TABLES `qr_feedbacks` WRITE;
+/*!40000 ALTER TABLE `qr_feedbacks` DISABLE KEYS */;
+INSERT INTO `qr_feedbacks` VALUES (1,4,0,NULL,5,'Test','2024-09-10 12:55:05','2024-09-10 12:55:05');
+/*!40000 ALTER TABLE `qr_feedbacks` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_image_menus`
+--
+
+DROP TABLE IF EXISTS `qr_image_menus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_image_menus` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `restaurant_id` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `active` enum('0','1') NOT NULL DEFAULT '1',
+  `position` int(11) NOT NULL DEFAULT 9999,
+  PRIMARY KEY (`id`),
+  KEY `restaurant_id` (`restaurant_id`),
+  CONSTRAINT `qr_image_menus_restaurant_id_foreign` FOREIGN KEY (`restaurant_id`) REFERENCES `qr_posts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_image_menus`
+--
+
+LOCK TABLES `qr_image_menus` WRITE;
+/*!40000 ALTER TABLE `qr_image_menus` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_image_menus` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_images`
+--
+
+DROP TABLE IF EXISTS `qr_images`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_images` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `filename` varchar(255) NOT NULL,
+  `original_url` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_images`
+--
+
+LOCK TABLES `qr_images` WRITE;
+/*!40000 ALTER TABLE `qr_images` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_images` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_languages`
+--
+
+DROP TABLE IF EXISTS `qr_languages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_languages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(10) DEFAULT NULL,
+  `direction` varchar(3) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `position` int(11) NOT NULL DEFAULT 999,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_languages`
+--
+
+LOCK TABLES `qr_languages` WRITE;
+/*!40000 ALTER TABLE `qr_languages` DISABLE KEYS */;
+INSERT INTO `qr_languages` VALUES (1,'en','ltr','English',0,0),(2,'fr','ltr','French',0,1),(3,'tr','ltr','Türkçe',1,999);
+/*!40000 ALTER TABLE `qr_languages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_menu`
+--
+
+DROP TABLE IF EXISTS `qr_menu`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_menu` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category_id` int(11) DEFAULT NULL,
+  `restaurant_id` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `price` double DEFAULT 0,
+  `image` varchar(255) DEFAULT 'default.png',
+  `type` enum('veg','nonveg') NOT NULL DEFAULT 'veg',
+  `allergies` text DEFAULT NULL,
+  `active` enum('0','1') NOT NULL DEFAULT '1',
+  `position` int(11) NOT NULL DEFAULT 9999,
+  `translations` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category_id` (`category_id`),
+  KEY `restraurant_id` (`restaurant_id`),
+  CONSTRAINT `qr_menu_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `qr_menu_categories` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `qr_menu_restaurant_id_foreign` FOREIGN KEY (`restaurant_id`) REFERENCES `qr_posts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_menu`
+--
+
+LOCK TABLES `qr_menu` WRITE;
+/*!40000 ALTER TABLE `qr_menu` DISABLE KEYS */;
+INSERT INTO `qr_menu` VALUES (27,9,4,'Zeytinyağlı Yaprak Sarma','Özenle seçilmiş asma yapraklarına sarılmış pirinç, kuş üzümü ve dolmalık fıstık ile hazırlanan hafif ve lezzetli bir başlangıç.',45,'66dec672b3d7e1725875826.png','veg',NULL,'1',9999,'{}'),(28,9,4,'Haydari','Yoğurt, sarımsak, nane ve zeytinyağının muhteşem uyumuyla hazırlanan geleneksel bir meze.',30,'66dec81564f0e1725876245.png','veg',NULL,'1',9999,'{}'),(29,9,4,'Muhammara','Ceviz, biber salçası ve zeytinyağı ile hazırlanan bu yoğun lezzetli meze, ekmeğinize enfes bir tat katar.',35,'66dec823809001725876259.png','veg',NULL,'1',9999,'{}'),(30,10,4,'Adana Kebap','Kıyma, biber ve baharatlarla harmanlanan, mangalda pişirilmiş bol acılı Adana kebap, közlenmiş biber ve soğanla sunulur.',90,'https://images.unsplash.com/photo-1672246585486-28fbf6874e4f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2NDk1NjV8MHwxfHNlYXJjaHwxfHxLZWJhcHxlbnwwfHx8fDE3MjU4NzY0NzF8MA&ixlib=rb-4.0.3&q=80&w=400','veg',NULL,'1',9999,NULL),(31,10,4,'İskender Kebap','Tereyağı soslu, yoğurt ve özel lavaş ekmeği üzerinde sunulan döner etleriyle klasik bir Türk lezzeti.',100,'https://images.unsplash.com/photo-1672246585840-9bac98678405?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2NDk1NjV8MHwxfHNlYXJjaHw5fHwlQzQlQjBza2VuZGVyJTIwS2ViYXB8ZW58MHx8fHwxNzI1ODc2NTQwfDA&ixlib=rb-4.0.3&q=80&w=400','veg',NULL,'1',9999,NULL),(32,10,4,'Etli Güveç','Yavaş pişirilmiş kuzu eti, domates, patlıcan ve soğanın birleşimiyle hazırlanan, taş fırında pişen geleneksel güveç.',150,NULL,'veg',NULL,'1',9999,NULL),(34,11,4,'Çoban Salata','aze domates, salatalık, soğan ve yeşil biberin zeytinyağı ve limon sosuyla harmanlandığı geleneksel Türk salatası.',40,'66deca83ce12c1725876867.png','veg',NULL,'1',9999,'{}'),(35,11,4,'Piyaz','Kuru fasulye, soğan, haşlanmış yumurta, limon ve zeytinyağı ile hazırlanan Akdeniz usulü geleneksel bir Türk salatası.',45,NULL,'veg',NULL,'1',9999,NULL),(36,12,7,'Kalamar Tava','Hafif unla kaplanmış ve altın renginde kızartılmış taze kalamar halkaları, sarımsaklı yoğurt sosuyla servis edilir.',75,'66decd4206fa41725877570.png','veg',NULL,'1',9999,'{}'),(37,12,7,'Karides Güveç','Tereyağı, sarımsak ve biber ile sotelenmiş taze karides, fırında güveçte sıcak olarak servis edilir.',99,'66dece8aecb9d1725877898.png','veg',NULL,'1',9999,'{}'),(39,13,7,'Levrek Izgara','aze Ege levreği, zeytinyağı ve limon sosuyla marine edilip mangalda pişirilir, yanında taze roka ve kırmızı soğan salatasıyla servis edilir.',150,'66decea5dcce51725877925.png','veg',NULL,'1',9999,'{}');
+/*!40000 ALTER TABLE `qr_menu` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_menu_categories`
+--
+
+DROP TABLE IF EXISTS `qr_menu_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_menu_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `restaurant_id` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `parent` int(11) DEFAULT NULL,
+  `position` int(11) DEFAULT 999,
+  `translations` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `restaurant_id` (`restaurant_id`),
+  KEY `parent` (`parent`),
+  CONSTRAINT `qr_menu_categories_parent_foreign` FOREIGN KEY (`parent`) REFERENCES `qr_menu_categories` (`id`) ON DELETE CASCADE ON UPDATE SET NULL,
+  CONSTRAINT `qr_menu_categories_restaurant_id_foreign` FOREIGN KEY (`restaurant_id`) REFERENCES `qr_posts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_menu_categories`
+--
+
+LOCK TABLES `qr_menu_categories` WRITE;
+/*!40000 ALTER TABLE `qr_menu_categories` DISABLE KEYS */;
+INSERT INTO `qr_menu_categories` VALUES (9,4,'Başlangıçlar / Aperatifler',NULL,0,NULL),(10,4,'Ana Yemekler',NULL,1,NULL),(11,4,'Salatalar',NULL,2,NULL),(12,7,'Başlangıçlar / Aperatifler',NULL,999,NULL),(13,7,'Ana Yemekler',NULL,999,NULL);
+/*!40000 ALTER TABLE `qr_menu_categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_menu_extras`
+--
+
+DROP TABLE IF EXISTS `qr_menu_extras`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_menu_extras` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `menu_id` int(11) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT 0.00,
+  `position` int(11) NOT NULL DEFAULT 9999,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `translations` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `menu_id` (`menu_id`),
+  CONSTRAINT `qr_menu_extras_menu_id_foreign` FOREIGN KEY (`menu_id`) REFERENCES `qr_menu` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_menu_extras`
+--
+
+LOCK TABLES `qr_menu_extras` WRITE;
+/*!40000 ALTER TABLE `qr_menu_extras` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_menu_extras` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_menu_variant_options`
+--
+
+DROP TABLE IF EXISTS `qr_menu_variant_options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_menu_variant_options` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `menu_id` int(11) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `options` text DEFAULT NULL,
+  `position` int(11) NOT NULL DEFAULT 9999,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `translations` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `menu_id` (`menu_id`),
+  CONSTRAINT `qr_menu_variant_options_menu_id_foreign` FOREIGN KEY (`menu_id`) REFERENCES `qr_menu` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_menu_variant_options`
+--
+
+LOCK TABLES `qr_menu_variant_options` WRITE;
+/*!40000 ALTER TABLE `qr_menu_variant_options` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_menu_variant_options` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_menu_variants`
+--
+
+DROP TABLE IF EXISTS `qr_menu_variants`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_menu_variants` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `menu_id` int(11) DEFAULT NULL,
+  `price` double DEFAULT NULL,
+  `options` longtext DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `position` int(11) NOT NULL DEFAULT 9999,
+  PRIMARY KEY (`id`),
+  KEY `menu_id` (`menu_id`),
+  CONSTRAINT `qr_menu_variants_menu_id_foreign` FOREIGN KEY (`menu_id`) REFERENCES `qr_menu` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_menu_variants`
+--
+
+LOCK TABLES `qr_menu_variants` WRITE;
+/*!40000 ALTER TABLE `qr_menu_variants` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_menu_variants` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_migrations`
+--
+
+DROP TABLE IF EXISTS `qr_migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_migrations`
+--
+
+LOCK TABLES `qr_migrations` WRITE;
+/*!40000 ALTER TABLE `qr_migrations` DISABLE KEYS */;
+INSERT INTO `qr_migrations` VALUES (1,'2024_06_15_122934_create_adsense_table',1),(2,'2024_06_15_122934_create_blog_cat_relation_table',1),(3,'2024_06_15_122934_create_blog_categories_table',1),(4,'2024_06_15_122934_create_blog_comment_table',1),(5,'2024_06_15_122934_create_blog_table',1),(6,'2024_06_15_122934_create_countries_table',1),(7,'2024_06_15_122934_create_coupons_table',1),(8,'2024_06_15_122934_create_faq_entries_table',1),(9,'2024_06_15_122934_create_languages_table',1),(10,'2024_06_15_122934_create_notifications_table',1),(11,'2024_06_15_122934_create_options_table',1),(12,'2024_06_15_122934_create_pages_table',1),(13,'2024_06_15_122934_create_password_resets_table',1),(14,'2024_06_15_122934_create_payment_gateways_table',1),(15,'2024_06_15_122934_create_plan_options_table',1),(16,'2024_06_15_122934_create_plans_table',1),(17,'2024_06_15_122934_create_post_options_table',1),(18,'2024_06_15_122934_create_post_views_table',1),(19,'2024_06_15_122934_create_posts_table',1),(20,'2024_06_15_122934_create_subscriber_table',1),(21,'2024_06_15_122934_create_taxes_table',1),(22,'2024_06_15_122934_create_testimonials_table',1),(23,'2024_06_15_122934_create_transaction_table',1),(24,'2024_06_15_122934_create_upgrades_table',1),(25,'2024_06_15_122934_create_user_options_table',1),(26,'2024_06_15_122934_create_user_table',1),(27,'2024_08_10_162235_create_image_menus_table',1),(28,'2024_08_10_162235_create_menu_categories_table',1),(47,'2024_08_20_185212_create__plan_tablecount',3),(48,'2024_08_20_190020_create__plan_tablecount2',4),(55,'2024_08_31_095825_create_staff_feedback_table',11),(57,'2024_08_31_175351_changepersonel',13),(59,'2024_09_01_172328_add_device__user_id_to_staff_feed_back_table01102024',14),(67,'2019_12_14_000001_create_personal_access_tokens_table',15),(68,'2024_08_10_162235_create_menu_extras_table',15),(69,'2024_08_10_162235_create_menu_table',15),(70,'2024_08_10_162235_create_menu_variant_options_table',15),(71,'2024_08_10_162235_create_menu_variants_table',15),(72,'2024_08_10_162235_create_order_item_extras_table',16),(73,'2024_08_10_162235_create_order_items_table',16),(74,'2024_08_10_162235_create_orders_table',16),(75,'2024_08_10_162235_create_waiter_call_table',16),(76,'2024_08_10_165237_create_allergies_table',16),(77,'2024_08_20_045853_create_tables_table',16),(78,'2024_08_20_050113_add_foreign_key_to_waiter_call_table',16),(79,'2024_08_20_050204_add_foreign_key_to_orders_table',16),(80,'2024_08_20_150839_add_status_to_table',16),(81,'2024_08_20_190821_create__plan_tablecount',16),(82,'2024_08_23_211419_renametablecreateddate',16),(83,'2024_08_23_220514_create_qr_codes_table',16),(84,'2024_08_25_104220_add_table_id_to_qr_menus_table',16),(85,'2024_08_29_112022_userpostcount',16),(86,'2024_08_31_092237_create_staff_members_table',16),(87,'2024_08_31_173625_change_salary_column_type_in_your_table_name',16),(88,'2024_09_01_172233_device__user01102024',16),(89,'2024_09_01_180021_order_device_user_id',16),(90,'2024_09_02_214830_create_images_table',16),(91,'2024_09_10_125006_feedbacks',17),(92,'2024_09_10_125034_feedback_categories',17),(93,'2024_09_10_125056_feedback_category_pivot',17),(94,'2024_09_10_125117_feedback_responses',18),(95,'2024_09_10_125145_feedback_statuses',18),(96,'2024_09_14_172556_add_tablecount_to_posts_table',19);
+/*!40000 ALTER TABLE `qr_migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_notifications`
+--
+
+DROP TABLE IF EXISTS `qr_notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_notifications` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `link` varchar(255) DEFAULT NULL,
+  `type` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0 : Unread 1: Read',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_notifications`
+--
+
+LOCK TABLES `qr_notifications` WRITE;
+/*!40000 ALTER TABLE `qr_notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_notifications` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_options`
+--
+
+DROP TABLE IF EXISTS `qr_options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_options` (
+  `option_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `option_name` varchar(191) DEFAULT NULL,
+  `option_value` longtext DEFAULT NULL,
+  PRIMARY KEY (`option_id`),
+  UNIQUE KEY `option_name` (`option_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_options`
+--
+
+LOCK TABLES `qr_options` WRITE;
+/*!40000 ALTER TABLE `qr_options` DISABLE KEYS */;
+INSERT INTO `qr_options` VALUES (1,'site_title','Craft Order'),(2,'tpl_name','classic-theme'),(3,'site_logo','66d576a5a40351725265573.png'),(4,'site_favicon','66d576a55a58a1725265573.png'),(5,'site_logo_footer','66d576a5ed73f1725265573.png'),(6,'site_admin_logo','66d576a641cb61725265574.png'),(7,'social_share_image','social_share.jpg'),(8,'meta_keywords','Sipariş yönetimi, personel yönetimi, restoran menü kampanya yönetimi, personel geri bildirimi, sipariş geri bildirimi, QR menü, restoran yönetimi.'),(9,'meta_description','raftOrder - Restoranlar için yenilikçi bir QR menü uygulaması. Restoran işletmelerinizde sipariş yönetimi, personel yönetimi, menü kampanya yönetimi ve personel ile sipariş geri bildirimi gibi temel operasyonları kolayca yönetin. Modern teknoloji ile müşteri memnuniyetini artırın, verimliliği maksimize edin. craftOrder2 ile işletmenizi geleceğe taşıyın!'),(10,'default_user_plan','free'),(11,'termcondition_link','http://localhost/laravel_cafe/admin/settings#quick_settings_general'),(12,'privacy_link','http://localhost/laravel_cafe/privacyPolicy'),(13,'cookie_link','http://localhost/laravel_cafe/admin/settings#quick_settings_general'),(14,'non_active_msg','1'),(15,'non_active_allow','1'),(16,'userlangsel','1'),(17,'cookie_consent','1'),(18,'demo_mode','0'),(19,'developer_credit','0'),(20,'quickad_debug','1'),(21,'timezone','Europe/Istanbul'),(22,'lang','tr'),(23,'currency_sign','₺'),(24,'currency_code','TL'),(25,'currency_pos','0'),(26,'admin_email','test@gmail.com'),(27,'smtp_host',NULL),(28,'smtp_port',NULL),(29,'smtp_username','admin'),(30,'smtp_password',''),(31,'smtp_secure','tls'),(32,'smtp_auth','true'),(33,'smtp_from_email','admin@gmail.com'),(34,'smtp_from_name','Admin'),(35,'smtp_mailer','log'),(36,'show_membershipplan_home','1'),(37,'show_partner_logo_home','1'),(38,'theme_color','#2a41e8'),(39,'contact_address','test address'),(40,'contact_phone','+9876543210'),(41,'contact_email','test@gmail.com'),(42,'facebook_link','https://facebook.com/bylancer.in'),(43,'twitter_link','https://x.com/bylancer'),(44,'instagram_link','https://instagram.com/bylancer'),(45,'linkedin_link','https://linkedin.com/bylancer'),(46,'pinterest_link','https://pinterest.com/bylancer'),(47,'youtube_link','https://www.youtube.com/c/Bylancer'),(48,'external_code',NULL),(49,'invoice_nr_prefix','INV-'),(50,'invoice_admin_name',''),(51,'invoice_admin_email',''),(52,'invoice_admin_phone',''),(53,'invoice_admin_address',''),(54,'invoice_admin_city',''),(55,'invoice_admin_state',''),(56,'invoice_admin_zipcode',''),(57,'invoice_admin_country',''),(58,'invoice_admin_tax_type','Tax ID'),(59,'invoice_admin_tax_id',''),(60,'facebook_login','0'),(61,'facebook_app_id',''),(62,'facebook_app_secret',''),(63,'google_login','0'),(64,'google_app_id',''),(65,'google_app_secret',''),(66,'recaptcha_mode','0'),(67,'recaptcha_public_key',''),(68,'recaptcha_private_key',''),(69,'blog_enable','0'),(70,'blog_banner','0'),(71,'show_blog_home','0'),(72,'blog_comment_enable','0'),(73,'blog_comment_approval','1'),(74,'blog_comment_user','1'),(75,'testimonials_enable','0'),(76,'show_testimonials_blog','0'),(77,'show_testimonials_home','0'),(78,'specific_country',''),(79,'disable_landing_page','0'),(80,'enable_user_registration','1'),(81,'enable_force_ssl','0'),(82,'include_language_code','0'),(83,'enable_faqs','1'),(84,'blog_page_limit','8'),(85,'google_analytics','{\"status\":\"0\",\"measurement_id\":null}'),(86,'tawk_to','{\"status\":\"0\",\"chat_link\":null}'),(87,'free_membership_plan','{\"id\":\"free\",\"status\":\"1\",\"name\":\"Free Plan\",\"tablecount\":\"10\",\"description\":\"test\",\"translations\":{\"tr\":{\"name\":\"Free Plan\",\"description\":\"test\"}},\"settings\":{\"category_limit\":\"10\",\"menu_limit\":\"10\",\"tablecount\":\"10\",\"scan_limit\":\"999\",\"allow_ordering\":\"0\",\"hide_branding\":\"0\",\"advertisements\":\"1\",\"custom_features\":null}}'),(88,'trial_membership_plan','{\"id\":\"trial\",\"status\":\"1\",\"name\":\"Deneme Paketi\",\"description\":null,\"translations\":{\"tr\":{\"name\":\"Deneme Paketi\",\"description\":null}},\"settings\":{\"category_limit\":\"50\",\"menu_limit\":\"5\",\"scan_limit\":\"100\",\"allow_ordering\":\"1\",\"hide_branding\":\"1\",\"advertisements\":\"0\",\"custom_features\":null},\"days\":\"10\"}'),(89,'admin_allergies','1'),(90,'admin_send_order_notification','1'),(91,'admin_allow_online_payment','1'),(92,'restaurant_text_editor','1'),(93,'email_sub_signup_details','{SITE_TITLE} - Thanks for signing up {USER_FULLNAME}!'),(94,'email_sub_signup_confirm','{SITE_TITLE} - Email Confirmation'),(95,'email_sub_forgot_pass','{SITE_TITLE} - Forgot Password'),(96,'email_sub_contact','Website Email: - {NAME} wants to contact you'),(97,'email_sub_feedback','{FEEDBACK_SUBJECT}'),(98,'email_message_signup_details','<p>Dear Valued Thanks for creating an account with {SITE_TITLE} ,</p>\n<p>Your username: {USERNAME}</p>\n<p>Have further questions?</p>\n<p>You can start chat with live support team. Sincerely,</p>\n<p>{SITE_TITLE} Team!</p>\n<p>{SITE_URL}</p>'),(99,'email_message_signup_confirm','<p>Greetings from {SITE_TITLE} Team!</p>\n<p>Thanks for registering with {SITE_TITLE}. We are thrilled to have you as a registered member and hope that you find our service beneficial. Before we get you started please activate your account by clicking on the link below</p>\n<p><a href=\"{CONFIRMATION_LINK}\">{CONFIRMATION_LINK}</a></p>\n<p>After your Account activation you can access the website. Once you have your Profile filled in you are ready to go.</p>\n<p>{SITE_TITLE} Team!</p>\n<p>{SITE_URL}</p>'),(100,'email_message_forgot_pass','<p>To reset your password please click the link below<br><br>{FORGET_PASSWORD_LINK}</p>\n<p>{SITE_TITLE} Team!</p>\n<p>{SITE_URL}</p>'),(101,'email_message_contact','<p>{NAME} wants to contact you</p>\n<p>{SITE_TITLE}:</p>\n<p>Name : {NAME}</p>\n<p>Email : {EMAIL}</p>\n<p>Message : {MESSAGE}</p>\n<p>------------------------------------------</p>\n<p>This message has been sent automatically by the {SITE_TITLE} system.</p>'),(102,'email_message_feedback','<p>{NAME} Send a feedback</p>\n<p>{SITE_TITLE}:</p>\n<p>Name : {NAME}</p>\n<p>Email : {EMAIL}</p>\n<p>Phone : {PHONE}</p>\n<p>Message : {MESSAGE}</p>\n<p>------------------------------------------</p>\n<p>This message has been sent automatically by the {SITE_TITLE} system.</p>'),(103,'email_sub_new_order','{RESTAURANT_NAME} - New Order'),(104,'email_message_new_order','<p>{RESTAURANT_NAME}</p>\n<p>New Order</p>\n<p>Customer: {CUSTOMER_NAME}<br>Table Number: {TABLE_NUMBER}<br>Message: {MESSAGE}</p>\n<p>Order<br>{ORDER}</p>'),(105,'purchase_code','3b56e4b6-7e46-49f0-9cf3-a717e431b8c4'),(106,'iyzico_sandbox_mode','test'),(107,'iyzico_api_key',NULL),(108,'iyzico_secret_key',NULL);
+/*!40000 ALTER TABLE `qr_options` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_order_item_extras`
+--
+
+DROP TABLE IF EXISTS `qr_order_item_extras`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_order_item_extras` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_item_id` int(11) DEFAULT NULL,
+  `extra_id` int(11) DEFAULT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_order_item_extras`
+--
+
+LOCK TABLES `qr_order_item_extras` WRITE;
+/*!40000 ALTER TABLE `qr_order_item_extras` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_order_item_extras` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_order_items`
+--
+
+DROP TABLE IF EXISTS `qr_order_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_order_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) DEFAULT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  `variation` int(11) DEFAULT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`),
+  KEY `item_id` (`item_id`),
+  CONSTRAINT `qr_order_items_item_id_foreign` FOREIGN KEY (`item_id`) REFERENCES `qr_menu` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `qr_order_items_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `qr_orders` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_order_items`
+--
+
+LOCK TABLES `qr_order_items` WRITE;
+/*!40000 ALTER TABLE `qr_order_items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_order_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_orders`
+--
+
+DROP TABLE IF EXISTS `qr_orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_orders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `restaurant_id` int(11) DEFAULT NULL,
+  `type` enum('on-table','takeaway','delivery') NOT NULL DEFAULT 'on-table',
+  `customer_name` varchar(255) DEFAULT NULL,
+  `table_number` int(11) DEFAULT NULL,
+  `phone_number` varchar(25) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `status` enum('pending','completed','unpaid') NOT NULL DEFAULT 'pending',
+  `message` varchar(255) DEFAULT NULL,
+  `seen` tinyint(1) NOT NULL DEFAULT 0,
+  `is_paid` tinyint(1) NOT NULL DEFAULT 0,
+  `payment_gateway` varchar(25) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `device_user_id` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `restaurant_id` (`restaurant_id`),
+  KEY `qr_orders_table_number_foreign` (`table_number`),
+  KEY `qr_orders_device_user_id_foreign` (`device_user_id`),
+  CONSTRAINT `qr_orders_device_user_id_foreign` FOREIGN KEY (`device_user_id`) REFERENCES `qr_device_users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `qr_orders_table_number_foreign` FOREIGN KEY (`table_number`) REFERENCES `qr_tables` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_orders`
+--
+
+LOCK TABLES `qr_orders` WRITE;
+/*!40000 ALTER TABLE `qr_orders` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_pages`
+--
+
+DROP TABLE IF EXISTS `qr_pages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_pages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `translation_lang` varchar(10) DEFAULT NULL,
+  `type` enum('0','1') NOT NULL DEFAULT '0' COMMENT '0:Public\n1:Private',
+  `slug` varchar(100) DEFAULT NULL,
+  `title` varchar(200) DEFAULT NULL,
+  `content` text DEFAULT NULL,
+  `active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `translation_lang` (`translation_lang`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_pages`
+--
+
+LOCK TABLES `qr_pages` WRITE;
+/*!40000 ALTER TABLE `qr_pages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_pages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_password_resets`
+--
+
+DROP TABLE IF EXISTS `qr_password_resets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_password_resets` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  KEY `password_resets_email_index` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_password_resets`
+--
+
+LOCK TABLES `qr_password_resets` WRITE;
+/*!40000 ALTER TABLE `qr_password_resets` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_password_resets` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_payment_gateways`
+--
+
+DROP TABLE IF EXISTS `qr_payment_gateways`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_payment_gateways` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `payment_install` enum('0','1') NOT NULL DEFAULT '0',
+  `payment_title` varchar(255) DEFAULT NULL,
+  `payment_folder` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_payment_gateways`
+--
+
+LOCK TABLES `qr_payment_gateways` WRITE;
+/*!40000 ALTER TABLE `qr_payment_gateways` DISABLE KEYS */;
+INSERT INTO `qr_payment_gateways` VALUES (1,'0','Paypal','paypal'),(2,'0','Credit & Debit Card','stripe'),(3,'1','Bank Deposit (Offline Payment)','wire_transfer'),(4,'0','2Checkout','two_checkout'),(5,'0','Paystack','paystack'),(6,'0','Payumoney','payumoney'),(7,'0','Paytm','paytm'),(8,'0','CCAvenue','ccavenue'),(9,'0','Mollie','mollie'),(10,'1','Iyzico','iyzico'),(11,'0','Midtrans','midtrans'),(12,'0','PayTabs','paytabs'),(13,'0','Telr','telr'),(14,'0','Razorpay','razorpay');
+/*!40000 ALTER TABLE `qr_payment_gateways` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_personal_access_tokens`
+--
+
+DROP TABLE IF EXISTS `qr_personal_access_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_personal_access_tokens` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tokenable_type` varchar(255) NOT NULL,
+  `tokenable_id` bigint(20) unsigned NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `qr_personal_access_tokens_token_unique` (`token`),
+  KEY `qr_personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_personal_access_tokens`
+--
+
+LOCK TABLES `qr_personal_access_tokens` WRITE;
+/*!40000 ALTER TABLE `qr_personal_access_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_personal_access_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_plan_options`
+--
+
+DROP TABLE IF EXISTS `qr_plan_options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_plan_options` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `translations` longtext DEFAULT NULL,
+  `position` int(11) DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_plan_options`
+--
+
+LOCK TABLES `qr_plan_options` WRITE;
+/*!40000 ALTER TABLE `qr_plan_options` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_plan_options` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_plans`
+--
+
+DROP TABLE IF EXISTS `qr_plans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_plans` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `translations` longtext DEFAULT NULL,
+  `monthly_price` double(8,2) NOT NULL DEFAULT 0.00,
+  `annual_price` double(8,2) NOT NULL DEFAULT 0.00,
+  `lifetime_price` double(8,2) NOT NULL DEFAULT 0.00,
+  `settings` text NOT NULL,
+  `recommended` enum('yes','no') NOT NULL DEFAULT 'no',
+  `taxes_ids` text DEFAULT NULL,
+  `position` int(11) DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `tablecount` bigint(20) NOT NULL,
+  `userpostcount` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_plans`
+--
+
+LOCK TABLES `qr_plans` WRITE;
+/*!40000 ALTER TABLE `qr_plans` DISABLE KEYS */;
+INSERT INTO `qr_plans` VALUES (3,'Ultra Extra','Sınırsız tarama\r\nSınırsız masa\r\nSınırsız kategori','{\"tr\":{\"name\":\"Ultra Extra\",\"description\":\"S\\u0131n\\u0131rs\\u0131z tarama\\r\\nS\\u0131n\\u0131rs\\u0131z masa\\r\\nS\\u0131n\\u0131rs\\u0131z kategori\"}}',0.00,1000.00,1000.00,'{\"category_limit\":\"100\",\"menu_limit\":\"100\",\"tablecount\":\"10\",\"scan_limit\":\"999\",\"allow_ordering\":\"1\",\"hide_branding\":\"1\",\"advertisements\":\"0\",\"custom_features\":null}','yes',NULL,2,1,'2024-08-21 12:05:28','2024-08-21 19:37:44',20,3);
+/*!40000 ALTER TABLE `qr_plans` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_post_options`
+--
+
+DROP TABLE IF EXISTS `qr_post_options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_post_options` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) DEFAULT NULL,
+  `option_name` varchar(191) DEFAULT NULL,
+  `option_value` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `post_id` (`post_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=297 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_post_options`
+--
+
+LOCK TABLES `qr_post_options` WRITE;
+/*!40000 ALTER TABLE `qr_post_options` DISABLE KEYS */;
+INSERT INTO `qr_post_options` VALUES (15,3,'restaurant_template',NULL),(16,3,'allow_call_waiter','1'),(17,3,'restaurant_on_table_order','1'),(18,3,'restaurant_send_order_notification','1'),(19,3,'currency_code','TL'),(20,3,'currency_sign','₺'),(21,3,'currency_pos','0'),(22,3,'menu_languages','null'),(23,3,'menu_layout','grid'),(24,3,'default_language',NULL),(25,3,'restaurant_takeaway_order','0'),(26,3,'restaurant_delivery_order','0'),(27,3,'restaurant_delivery_charge',NULL),(28,3,'restaurant_online_payment','0'),(29,3,'restaurant_paypal_install','0'),(30,3,'restaurant_paypal_title',NULL),(31,3,'restaurant_paypal_sandbox_mode','Yes'),(32,3,'restaurant_paypal_api_client_id',NULL),(33,3,'restaurant_paypal_api_secret',NULL),(34,3,'restaurant_paypal_api_app_id',NULL),(35,3,'restaurant_stripe_install','0'),(36,3,'restaurant_stripe_title',NULL),(37,3,'restaurant_stripe_secret_key',NULL),(38,3,'restaurant_stripe_publishable_key',NULL),(39,3,'restaurant_razorpay_install','0'),(40,3,'restaurant_razorpay_title',NULL),(41,3,'restaurant_razorpay_api_key',NULL),(42,3,'restaurant_razorpay_secret_key',NULL),(43,3,'restaurant_mollie_install','0'),(44,3,'restaurant_mollie_title',NULL),(45,3,'restaurant_mollie_api_key',NULL),(46,3,'restaurant_paytm_install','0'),(47,3,'restaurant_paytm_title',NULL),(48,3,'restaurant_paytm_sandbox_mode','TEST'),(49,3,'restaurant_paytm_merchant_key',NULL),(50,3,'restaurant_paytm_merchant_mid',NULL),(51,3,'restaurant_paytm_merchant_website',NULL),(52,3,'restaurant_paystack_install','0'),(53,3,'restaurant_paystack_title',NULL),(54,3,'restaurant_paystack_secret_key',NULL),(55,3,'restaurant_paystack_public_key',NULL),(56,3,'restaurant_payumoney_install','0'),(57,3,'restaurant_payumoney_title',NULL),(58,3,'restaurant_payumoney_sandbox_mode','1'),(59,3,'restaurant_payumoney_merchant_pos_id',NULL),(60,3,'restaurant_payumoney_signature_key',NULL),(61,3,'restaurant_payumoney_oauth_client_id',NULL),(62,3,'restaurant_payumoney_oauth_client_secret',NULL),(63,3,'restaurant_iyzico_install','0'),(64,3,'restaurant_iyzico_title',NULL),(65,3,'restaurant_iyzico_sandbox_mode','test'),(66,3,'restaurant_iyzico_api_key',NULL),(67,3,'restaurant_iyzico_secret_key',NULL),(68,3,'restaurant_midtrans_install','0'),(69,3,'restaurant_midtrans_title',NULL),(70,3,'restaurant_midtrans_sandbox_mode','test'),(71,3,'restaurant_midtrans_client_key',NULL),(72,3,'restaurant_midtrans_server_key',NULL),(73,3,'restaurant_paytabs_install','0'),(74,3,'restaurant_paytabs_title',NULL),(75,3,'restaurant_paytabs_region','ARE'),(76,3,'restaurant_paytabs_profile_id',NULL),(77,3,'restaurant_paytabs_secret_key',NULL),(78,3,'restaurant_telr_install','0'),(79,3,'restaurant_telr_title',NULL),(80,3,'restaurant_telr_sandbox_mode','test'),(81,3,'restaurant_telr_store_id',NULL),(82,3,'restaurant_telr_authkey',NULL),(83,3,'restaurant_2checkout_install','0'),(84,3,'restaurant_2checkout_title',NULL),(85,3,'restaurant_2checkout_sandbox_mode','sandbox'),(86,3,'restaurant_2checkout_account_number',NULL),(87,3,'restaurant_2checkout_public_key',NULL),(88,3,'restaurant_2checkout_private_key',NULL),(89,3,'restaurant_ccavenue_install','0'),(90,3,'restaurant_ccavenue_title',NULL),(91,3,'restaurant_ccavenue_merchant_key',NULL),(92,3,'restaurant_ccavenue_access_code',NULL),(93,3,'restaurant_ccavenue_working_key',NULL),(94,3,'qr_fg_color','#000000'),(95,3,'qr_bg_color','#ffffff'),(96,3,'qr_padding','2'),(97,3,'qr_radius','50'),(98,3,'qr_mode','2'),(99,3,'qr_text','Lezzet Durağı'),(100,3,'qr_text_color','#FF0000'),(101,3,'qr_mode_size','10'),(102,3,'qr_position_x','50'),(103,3,'qr_position_y','50'),(104,4,'restaurant_template',NULL),(105,4,'allow_call_waiter','1'),(106,4,'restaurant_on_table_order','1'),(107,4,'restaurant_send_order_notification','1'),(108,4,'currency_code','TL'),(109,4,'currency_sign','₺'),(110,4,'currency_pos','0'),(111,5,'restaurant_template','classic-theme'),(112,5,'allow_call_waiter','1'),(113,5,'restaurant_on_table_order','1'),(114,5,'restaurant_send_order_notification','1'),(115,5,'currency_code','TL'),(116,5,'currency_sign','₺'),(117,5,'currency_pos','0'),(118,6,'restaurant_template','classic-theme'),(119,6,'allow_call_waiter','1'),(120,6,'restaurant_on_table_order','1'),(121,6,'restaurant_send_order_notification','1'),(122,6,'currency_code','TL'),(123,6,'currency_sign','₺'),(124,6,'currency_pos','0'),(125,7,'restaurant_template',NULL),(126,7,'allow_call_waiter','1'),(127,7,'restaurant_on_table_order','1'),(128,7,'restaurant_send_order_notification','1'),(129,7,'currency_code','TL'),(130,7,'currency_sign','₺'),(131,7,'currency_pos','0'),(132,8,'restaurant_template','classic-theme'),(133,8,'allow_call_waiter','1'),(134,8,'restaurant_on_table_order','1'),(135,8,'restaurant_send_order_notification','1'),(136,8,'currency_code','TL'),(137,8,'currency_sign','₺'),(138,8,'currency_pos','0'),(139,9,'restaurant_template','classic-theme'),(140,9,'allow_call_waiter','1'),(141,9,'restaurant_on_table_order','1'),(142,9,'restaurant_send_order_notification','1'),(143,9,'currency_code','TL'),(144,9,'currency_sign','₺'),(145,9,'currency_pos','0'),(146,4,'menu_languages','null'),(147,4,'menu_layout','grid'),(148,4,'default_language',NULL),(149,4,'restaurant_takeaway_order','0'),(150,4,'restaurant_delivery_order','0'),(151,4,'restaurant_delivery_charge',NULL),(152,4,'restaurant_online_payment','0'),(153,4,'restaurant_paypal_install','0'),(154,4,'restaurant_paypal_title',NULL),(155,4,'restaurant_paypal_sandbox_mode','Yes'),(156,4,'restaurant_paypal_api_client_id',NULL),(157,4,'restaurant_paypal_api_secret',NULL),(158,4,'restaurant_paypal_api_app_id',NULL),(159,4,'restaurant_stripe_install','0'),(160,4,'restaurant_stripe_title',NULL),(161,4,'restaurant_stripe_secret_key',NULL),(162,4,'restaurant_stripe_publishable_key',NULL),(163,4,'restaurant_razorpay_install','0'),(164,4,'restaurant_razorpay_title',NULL),(165,4,'restaurant_razorpay_api_key',NULL),(166,4,'restaurant_razorpay_secret_key',NULL),(167,4,'restaurant_mollie_install','0'),(168,4,'restaurant_mollie_title',NULL),(169,4,'restaurant_mollie_api_key',NULL),(170,4,'restaurant_paytm_install','0'),(171,4,'restaurant_paytm_title',NULL),(172,4,'restaurant_paytm_sandbox_mode','TEST'),(173,4,'restaurant_paytm_merchant_key',NULL),(174,4,'restaurant_paytm_merchant_mid',NULL),(175,4,'restaurant_paytm_merchant_website',NULL),(176,4,'restaurant_paystack_install','0'),(177,4,'restaurant_paystack_title',NULL),(178,4,'restaurant_paystack_secret_key',NULL),(179,4,'restaurant_paystack_public_key',NULL),(180,4,'restaurant_payumoney_install','0'),(181,4,'restaurant_payumoney_title',NULL),(182,4,'restaurant_payumoney_sandbox_mode','1'),(183,4,'restaurant_payumoney_merchant_pos_id',NULL),(184,4,'restaurant_payumoney_signature_key',NULL),(185,4,'restaurant_payumoney_oauth_client_id',NULL),(186,4,'restaurant_payumoney_oauth_client_secret',NULL),(187,4,'restaurant_iyzico_install','0'),(188,4,'restaurant_iyzico_title',NULL),(189,4,'restaurant_iyzico_sandbox_mode','test'),(190,4,'restaurant_iyzico_api_key',NULL),(191,4,'restaurant_iyzico_secret_key',NULL),(192,4,'restaurant_midtrans_install','0'),(193,4,'restaurant_midtrans_title',NULL),(194,4,'restaurant_midtrans_sandbox_mode','test'),(195,4,'restaurant_midtrans_client_key',NULL),(196,4,'restaurant_midtrans_server_key',NULL),(197,4,'restaurant_paytabs_install','0'),(198,4,'restaurant_paytabs_title',NULL),(199,4,'restaurant_paytabs_region','ARE'),(200,4,'restaurant_paytabs_profile_id',NULL),(201,4,'restaurant_paytabs_secret_key',NULL),(202,4,'restaurant_telr_install','0'),(203,4,'restaurant_telr_title',NULL),(204,4,'restaurant_telr_sandbox_mode','test'),(205,4,'restaurant_telr_store_id',NULL),(206,4,'restaurant_telr_authkey',NULL),(207,4,'restaurant_2checkout_install','0'),(208,4,'restaurant_2checkout_title',NULL),(209,4,'restaurant_2checkout_sandbox_mode','sandbox'),(210,4,'restaurant_2checkout_account_number',NULL),(211,4,'restaurant_2checkout_public_key',NULL),(212,4,'restaurant_2checkout_private_key',NULL),(213,4,'restaurant_ccavenue_install','0'),(214,4,'restaurant_ccavenue_title',NULL),(215,4,'restaurant_ccavenue_merchant_key',NULL),(216,4,'restaurant_ccavenue_access_code',NULL),(217,4,'restaurant_ccavenue_working_key',NULL),(218,7,'menu_languages','null'),(219,7,'menu_layout','grid'),(220,7,'default_language',NULL),(221,7,'restaurant_takeaway_order','0'),(222,7,'restaurant_delivery_order','0'),(223,7,'restaurant_delivery_charge',NULL),(224,7,'restaurant_online_payment','0'),(225,7,'restaurant_paypal_install','0'),(226,7,'restaurant_paypal_title',NULL),(227,7,'restaurant_paypal_sandbox_mode','Yes'),(228,7,'restaurant_paypal_api_client_id',NULL),(229,7,'restaurant_paypal_api_secret',NULL),(230,7,'restaurant_paypal_api_app_id',NULL),(231,7,'restaurant_stripe_install','0'),(232,7,'restaurant_stripe_title',NULL),(233,7,'restaurant_stripe_secret_key',NULL),(234,7,'restaurant_stripe_publishable_key',NULL),(235,7,'restaurant_razorpay_install','0'),(236,7,'restaurant_razorpay_title',NULL),(237,7,'restaurant_razorpay_api_key',NULL),(238,7,'restaurant_razorpay_secret_key',NULL),(239,7,'restaurant_mollie_install','0'),(240,7,'restaurant_mollie_title',NULL),(241,7,'restaurant_mollie_api_key',NULL),(242,7,'restaurant_paytm_install','0'),(243,7,'restaurant_paytm_title',NULL),(244,7,'restaurant_paytm_sandbox_mode','TEST'),(245,7,'restaurant_paytm_merchant_key',NULL),(246,7,'restaurant_paytm_merchant_mid',NULL),(247,7,'restaurant_paytm_merchant_website',NULL),(248,7,'restaurant_paystack_install','0'),(249,7,'restaurant_paystack_title',NULL),(250,7,'restaurant_paystack_secret_key',NULL),(251,7,'restaurant_paystack_public_key',NULL),(252,7,'restaurant_payumoney_install','0'),(253,7,'restaurant_payumoney_title',NULL),(254,7,'restaurant_payumoney_sandbox_mode','1'),(255,7,'restaurant_payumoney_merchant_pos_id',NULL),(256,7,'restaurant_payumoney_signature_key',NULL),(257,7,'restaurant_payumoney_oauth_client_id',NULL),(258,7,'restaurant_payumoney_oauth_client_secret',NULL),(259,7,'restaurant_iyzico_install','0'),(260,7,'restaurant_iyzico_title',NULL),(261,7,'restaurant_iyzico_sandbox_mode','test'),(262,7,'restaurant_iyzico_api_key',NULL),(263,7,'restaurant_iyzico_secret_key',NULL),(264,7,'restaurant_midtrans_install','0'),(265,7,'restaurant_midtrans_title',NULL),(266,7,'restaurant_midtrans_sandbox_mode','test'),(267,7,'restaurant_midtrans_client_key',NULL),(268,7,'restaurant_midtrans_server_key',NULL),(269,7,'restaurant_paytabs_install','0'),(270,7,'restaurant_paytabs_title',NULL),(271,7,'restaurant_paytabs_region','ARE'),(272,7,'restaurant_paytabs_profile_id',NULL),(273,7,'restaurant_paytabs_secret_key',NULL),(274,7,'restaurant_telr_install','0'),(275,7,'restaurant_telr_title',NULL),(276,7,'restaurant_telr_sandbox_mode','test'),(277,7,'restaurant_telr_store_id',NULL),(278,7,'restaurant_telr_authkey',NULL),(279,7,'restaurant_2checkout_install','0'),(280,7,'restaurant_2checkout_title',NULL),(281,7,'restaurant_2checkout_sandbox_mode','sandbox'),(282,7,'restaurant_2checkout_account_number',NULL),(283,7,'restaurant_2checkout_public_key',NULL),(284,7,'restaurant_2checkout_private_key',NULL),(285,7,'restaurant_ccavenue_install','0'),(286,7,'restaurant_ccavenue_title',NULL),(287,7,'restaurant_ccavenue_merchant_key',NULL),(288,7,'restaurant_ccavenue_access_code',NULL),(289,7,'restaurant_ccavenue_working_key',NULL),(290,10,'restaurant_template','classic-theme'),(291,10,'allow_call_waiter','1'),(292,10,'restaurant_on_table_order','1'),(293,10,'restaurant_send_order_notification','1'),(294,10,'currency_code','TL'),(295,10,'currency_sign','₺'),(296,10,'currency_pos','0');
+/*!40000 ALTER TABLE `qr_post_options` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_post_views`
+--
+
+DROP TABLE IF EXISTS `qr_post_views`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_post_views` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) DEFAULT NULL,
+  `ip` varchar(255) DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
+  `table_id` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `post_id` (`post_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_post_views`
+--
+
+LOCK TABLES `qr_post_views` WRITE;
+/*!40000 ALTER TABLE `qr_post_views` DISABLE KEYS */;
+INSERT INTO `qr_post_views` VALUES (3,3,'192.168.1.100','2024-08-23 15:10:15',NULL),(4,3,'::1','2024-08-24 14:24:40',NULL),(5,3,'::1','2024-08-27 09:17:38',NULL),(6,3,'::1','2024-08-27 09:17:44',NULL),(7,9,'104.28.212.150','2024-09-09 09:08:05',NULL),(8,9,'104.28.212.150','2024-09-09 09:08:05',NULL),(9,9,'104.28.212.150','2024-09-09 09:08:05',NULL),(10,9,'104.28.212.150','2024-09-09 09:08:05',NULL),(11,9,'104.28.212.150','2024-09-09 09:08:05',NULL),(12,9,'104.28.212.150','2024-09-09 09:08:06',NULL),(13,9,'104.28.212.150','2024-09-09 09:08:06',NULL),(14,9,'104.28.212.150','2024-09-09 09:08:06',NULL),(15,9,'104.28.212.150','2024-09-09 09:08:06',NULL),(16,9,'104.28.212.150','2024-09-09 09:08:06',NULL),(17,9,'104.28.212.150','2024-09-09 09:08:07',NULL),(18,9,'104.28.212.150','2024-09-09 09:08:07',NULL),(19,9,'104.28.212.150','2024-09-09 09:08:07',NULL),(20,9,'104.28.212.150','2024-09-09 09:08:07',NULL),(21,9,'104.28.212.150','2024-09-09 09:08:07',NULL),(22,9,'104.28.212.150','2024-09-09 09:08:08',NULL),(23,9,'104.28.212.150','2024-09-09 09:08:08',NULL),(24,9,'104.28.212.150','2024-09-09 09:08:08',NULL),(25,9,'104.28.212.150','2024-09-09 09:08:08',NULL),(26,9,'104.28.212.150','2024-09-09 09:08:08',NULL),(27,9,'104.28.212.150','2024-09-09 09:08:08',NULL),(28,9,'104.28.212.150','2024-09-09 09:09:19',NULL),(29,9,'104.28.212.150','2024-09-09 09:09:19',NULL),(30,9,'104.28.212.150','2024-09-09 09:09:19',NULL),(31,9,'104.28.212.150','2024-09-09 09:09:19',NULL),(32,9,'104.28.212.150','2024-09-09 09:09:20',NULL),(33,9,'104.28.212.150','2024-09-09 09:09:20',NULL),(34,9,'104.28.212.150','2024-09-09 09:09:20',NULL),(35,9,'104.28.212.150','2024-09-09 09:09:20',NULL),(36,9,'104.28.212.150','2024-09-09 09:09:20',NULL),(37,9,'104.28.212.150','2024-09-09 09:09:21',NULL),(38,9,'104.28.212.150','2024-09-09 09:09:21',NULL),(39,9,'104.28.212.150','2024-09-09 09:09:21',NULL),(40,9,'104.28.212.150','2024-09-09 09:09:21',NULL),(41,9,'104.28.212.150','2024-09-09 09:09:21',NULL),(42,9,'104.28.212.150','2024-09-09 09:09:22',NULL),(43,9,'104.28.212.150','2024-09-09 09:09:22',NULL),(44,9,'104.28.212.150','2024-09-09 09:09:22',NULL),(45,9,'104.28.212.150','2024-09-09 09:09:22',NULL),(46,9,'104.28.212.150','2024-09-09 09:09:22',NULL),(47,9,'104.28.212.150','2024-09-09 09:09:23',NULL),(48,9,'104.28.212.150','2024-09-09 09:09:23',NULL),(49,9,'104.28.212.150','2024-09-09 09:09:41',NULL),(50,4,'127.0.0.1','2024-09-10 09:47:22',NULL),(51,4,'127.0.0.1','2024-09-10 09:48:36',NULL),(52,4,'127.0.0.1','2024-09-11 20:10:30',NULL),(53,4,'127.0.0.1','2024-09-11 20:10:53',NULL),(54,4,'127.0.0.1','2024-09-11 20:11:06',NULL),(55,4,'127.0.0.1','2024-09-11 20:12:47',NULL),(56,4,'127.0.0.1','2024-09-11 20:14:18',NULL),(57,4,'127.0.0.1','2024-09-11 20:18:05',NULL),(58,4,'127.0.0.1','2024-09-11 20:18:34',NULL),(59,4,'127.0.0.1','2024-09-11 20:18:45',NULL);
+/*!40000 ALTER TABLE `qr_post_views` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_posts`
+--
+
+DROP TABLE IF EXISTS `qr_posts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `color` varchar(10) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `sub_title` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `main_image` varchar(255) DEFAULT 'default.png',
+  `cover_image` varchar(255) DEFAULT 'default.png',
+  `timing` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `tablecount` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_posts`
+--
+
+LOCK TABLES `qr_posts` WRITE;
+/*!40000 ALTER TABLE `qr_posts` DISABLE KEYS */;
+INSERT INTO `qr_posts` VALUES (4,2,'lezzet-duragi','#FF6F61','Lezzet Durağı','Geleneksel Türk Mutfağının Enfes Lezzetleri','<p>Lezzet Durağı, damaklarda unutulmaz tatlar bırakan geleneksel T&uuml;rk mutfağı lezzetlerini sizlerle buluşturuyor. &Ouml;zenle hazırlanan yemeklerimiz, kaliteli malzemeler ve sevgiyle pişirilerek sofralarınıza geliyor. Samimi atmosferimizde sevdiklerinizle keyifli anlar yaşayın</p>','66ddd4d081c881725813968.png','66ddd4d07219c1725813968.png','Pazartesi - Cuma: 08:00 - 22:00 Cumartesi - Pazar: 09:00 - 23:00','İstiklal Caddesi No: 45, Beyoğlu, 34430 İstanbul, Türkiye','+90 212 123 45 6*','2024-09-08 19:46:08','2024-09-08 19:46:08',NULL),(5,3,'gurme-bahce','#3A9AD9','Gurme Bahçe','Taze ve Doğal Malzemelerle Hazırlanan Özel Tarifler','<p>Gurme Bah&ccedil;e, taze ve doğal malzemelerle hazırlanmış, lezzet dolu tarifleriyle sizi doğanın en g&uuml;zel tatlarıyla buluşturuyor. Şehrin stresinden uzak, huzurlu bir ortamda, sağlıklı ve &ouml;zenle hazırlanmış yemeklerin tadını &ccedil;ıkarın. Sizin i&ccedil;in &ouml;zenle se&ccedil;ilmiş, yerel &uuml;r&uuml;nlerle hazırlanan men&uuml;m&uuml;z, damak zevkinize hitap edecek.</p>','66dddb35b4a651725815605.png','66dddb35a98421725815605.png','Her Gün: 10:00 - 21:00','Atatürk Bulvarı No: 12, Çankaya, 06680 Ankara, Türkiye','+90 312 654 32 10','2024-09-08 20:13:25','2024-09-08 20:13:25',NULL),(6,4,'ziyafet-sofrasi','#FFD700','Ziyafet Sofrası','Geleneksel Türk lezzetlerini modern dokunuşlarla yeniden keşfedin.','<p>Ziyafet Sofrası, T&uuml;rk mutfağının asırlık lezzetlerini şık ve zarif bir atmosferde sunar. &Ouml;zel şeflerin &ouml;zenle hazırladığı men&uuml;ler, T&uuml;rk geleneklerinin modern yorumlarını masanıza getirir</p>','66dddd5163f001725816145.png','66dddd515177d1725816145.png','Her gün: 11:00 - 23:00','Bağdat Caddesi No: 125, Kadıköy, 34724 İstanbul, Türkiye','+90 216 123 45 67','2024-09-08 20:22:25','2024-09-08 20:22:25',NULL),(7,5,'mavi-deniz','#1E90FF','Mavi Deniz','Taze deniz ürünleri ve Akdeniz mutfağının en iyisi.','<p>Mavi Deniz, Ege ve Akdeniz\'in taptaze deniz mahsullerini sofistike bir ortamda sunar. Denizin kokusunu ve tazeliğini hissedeceğiniz bu mekan, d&uuml;nya &ccedil;apında bir deneyim sunmayı hedefliyor.</p>\r\n<p>&nbsp;</p>','66dddff053d1b1725816816.png','66dddff0498b31725816816.png','Pazartesi - Cumartesi: 12:00 - 22:00','Kordon Boyu No: 50, Konak, 35260 İzmir, Türkiye','+90 232 654 32 12','2024-09-08 20:33:36','2024-09-08 20:33:36',NULL),(8,6,'lokma-duragi','#FF8E8E','Lokma Durağı','Türk sokak lezzetlerinin nostaljik ve modern yorumları','<p>Lokma Durağı, T&uuml;rk sokak lezzetlerini bir araya getirerek, geleneksel tatları modern dokunuşlarla harmanlıyor. Sokak yemeklerini, samimi ve keyifli bir ortamda sunarak misafirlerine lezzetli bir deneyim yaşatıyor.</p>','66dde997069f21725819287.png','66dde996ed9e91725819286.png','Her gün: 09:00 - 23:00','Bahariye Caddesi No: 60, Kadıköy, 34714 İstanbul, Türkiye','+90 216 987 45 32','2024-09-08 21:14:47','2024-09-08 21:14:47',NULL),(9,7,'kahve-bahcesi','#F5F5DC','Kahve Bahçesi | Karşıyaka Şube','Doğanın içinde taze kahve ve lezzetli tatlar.','<p>Kahve Bah&ccedil;esi, doğayla i&ccedil; i&ccedil;e bir ortamda taze demlenen kahveleri ve lezzetli tatlılarıyla keyifli bir mola yeri sunuyor. Şehrin kalabalığından uzaklaşmak isteyenler i&ccedil;in huzur dolu bir mekan.</p>','66ddec1fab48b1725819935.png','66ddec1fa02e01725819935.png','Her gün: 08:00 - 22:00','Mavişehir Mahallesi No: 24, Karşıyaka, 35540 İzmir, Türkiye','+90 232 765 43 21','2024-09-08 21:25:35','2024-09-08 21:25:35',NULL),(10,1,'test1','#2a41e8','test','tes1','<p>--</p>','66e5a36e43ba41726325614.png','66e5a36e39e441726325614.png','08:00 16:00','--','555 555 55 55','2024-09-14 17:53:34','2024-09-14 17:53:34',20);
+/*!40000 ALTER TABLE `qr_posts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_qr_codes`
+--
+
+DROP TABLE IF EXISTS `qr_qr_codes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_qr_codes` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `file_path` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_qr_codes`
+--
+
+LOCK TABLES `qr_qr_codes` WRITE;
+/*!40000 ALTER TABLE `qr_qr_codes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_qr_codes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_staff_members`
+--
+
+DROP TABLE IF EXISTS `qr_staff_members`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_staff_members` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `position` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `photo_url` varchar(255) DEFAULT NULL,
+  `hire_date` date DEFAULT NULL,
+  `salary` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `surname` varchar(255) NOT NULL,
+  `restaurant_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `qr_staff_members_email_unique` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_staff_members`
+--
+
+LOCK TABLES `qr_staff_members` WRITE;
+/*!40000 ALTER TABLE `qr_staff_members` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_staff_members` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_subscriber`
+--
+
+DROP TABLE IF EXISTS `qr_subscriber`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_subscriber` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) DEFAULT NULL,
+  `joined` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_subscriber`
+--
+
+LOCK TABLES `qr_subscriber` WRITE;
+/*!40000 ALTER TABLE `qr_subscriber` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_subscriber` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_tables`
+--
+
+DROP TABLE IF EXISTS `qr_tables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_tables` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `restoid` int(11) NOT NULL,
+  `table_id` bigint(20) NOT NULL,
+  `url` text NOT NULL,
+  `created_at` varchar(255) NOT NULL DEFAULT 'CURRENT_TIMESTAMP',
+  `updated_at` varchar(255) DEFAULT NULL,
+  `qr_text` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'available',
+  PRIMARY KEY (`id`),
+  KEY `qr_tables_userid_foreign` (`userid`),
+  KEY `qr_tables_restoid_foreign` (`restoid`),
+  CONSTRAINT `qr_tables_restoid_foreign` FOREIGN KEY (`restoid`) REFERENCES `qr_posts` (`id`),
+  CONSTRAINT `qr_tables_userid_foreign` FOREIGN KEY (`userid`) REFERENCES `qr_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_tables`
+--
+
+LOCK TABLES `qr_tables` WRITE;
+/*!40000 ALTER TABLE `qr_tables` DISABLE KEYS */;
+INSERT INTO `qr_tables` VALUES (1,7,9,1,'1','2024-09-10 19:36:52','2024-09-12 13:15:05','Xgu79j4TMVkmTuoiJA==','full'),(2,7,9,2,'2','2024-09-10 19:36:52','2024-09-10 19:36:52','sSro+dmoP1j+oYQfjg==','available'),(3,7,9,3,'3','2024-09-10 19:36:52','2024-09-10 19:36:52','HL+m+90ctnnC8S/tLA==','available'),(4,7,9,4,'4','2024-09-10 19:36:52','2024-09-10 19:36:52','cAV/6L+z118fCzXsug==','available'),(5,7,9,5,'5','2024-09-10 19:36:52','2024-09-10 19:36:52','x1WH6wauFXSHSOQEcQ==','available'),(6,7,9,6,'6','2024-09-10 19:36:52','2024-09-10 19:36:52','qr6BPOvu/3xnhrjEBg==','available'),(7,7,9,7,'7','2024-09-10 19:36:52','2024-09-10 19:36:52','+0odKVnBg4uIpcK83g==','available'),(8,7,9,8,'8','2024-09-10 19:36:52','2024-09-10 19:36:52','lTwG3R5ynvWdi87+vw==','available'),(9,7,9,9,'9','2024-09-10 19:36:52','2024-09-10 19:36:52','Yb+DWl+wOQxiI67SDA==','available'),(10,7,9,10,'10','2024-09-10 19:36:52','2024-09-10 19:36:52','2rSd/O2OvUjzn2GdTQ==','available'),(11,6,8,1,'1','2024-09-10 19:37:00','2024-09-10 19:37:00','WQW47ToTN008TOg4','available'),(12,6,8,2,'2','2024-09-10 19:37:00','2024-09-10 19:37:00','tiTr4t2oOUzko4YF','available'),(13,6,8,3,'3','2024-09-10 19:37:00','2024-09-10 19:37:00','G7Gl4NkcsG3Y8y33','available'),(14,6,8,4,'4','2024-09-10 19:37:00','2024-09-10 19:37:00','dwt887uz0UsFCTf2','available'),(15,6,8,5,'5','2024-09-10 19:37:00','2024-09-10 19:37:00','wFuE8AKuE2CdSuYe','available'),(16,6,8,6,'6','2024-09-10 19:37:00','2024-09-10 19:37:00','rbCCJ+/u+Wh9hLre','available'),(17,6,8,7,'7','2024-09-10 19:37:00','2024-09-10 19:37:00','/EQeMl3BhZ+Sp8Cm','available'),(18,6,8,8,'8','2024-09-10 19:37:00','2024-09-10 19:37:00','kjIFxhpymOGHiczk','available'),(19,6,8,9,'9','2024-09-10 19:37:00','2024-09-10 19:37:00','ZrGAQVuwPxh4IazI','available'),(20,6,8,10,'10','2024-09-10 19:37:00','2024-09-10 19:37:00','3bqe5+mOu1zpnWOH','available'),(21,5,7,1,'1','2024-09-10 19:37:14','2024-09-10 19:37:14','WAul6XZaNlYnVw==','available'),(22,5,7,2,'2','2024-09-10 19:37:14','2024-09-10 19:37:14','tyr25pHhOFf/uA==','available'),(23,5,7,3,'3','2024-09-10 19:37:14','2024-09-10 19:37:14','Gr+45JVVsXbD6A==','available'),(24,5,7,4,'4','2024-09-10 19:37:14','2024-09-10 19:37:14','dgVh9/f60FAeEg==','available'),(25,5,7,5,'5','2024-09-10 19:37:14','2024-09-10 19:37:14','wVWZ9E7nEnuGUQ==','available'),(26,5,7,6,'6','2024-09-10 19:37:14','2024-09-10 19:37:14','rL6fI6On+HNmnw==','available'),(27,5,7,7,'7','2024-09-10 19:37:14','2024-09-10 19:37:14','/UoDNhGIhISJvA==','available'),(28,5,7,8,'8','2024-09-10 19:37:14','2024-09-10 19:37:14','kzwYwlY7mfqckg==','available'),(29,5,7,9,'9','2024-09-10 19:37:14','2024-09-10 19:37:14','Z7+dRRf5PgNjOg==','available'),(30,5,7,10,'10','2024-09-10 19:37:14','2024-09-10 19:37:14','3LSD46XHukfyhg==','available'),(31,4,6,1,'1','2024-09-10 19:37:21','2024-09-10 19:37:21','TwOq4T1bJxU9QukjLM4f','available'),(32,4,6,2,'2','2024-09-10 19:37:21','2024-09-10 19:37:21','oCL57trgKRTlrYcehiOA','available'),(33,4,6,3,'3','2024-09-10 19:37:21','2024-09-10 19:37:21','Dbe37N5UoDXZ/SzsJJ3/','available'),(34,4,6,4,'4','2024-09-10 19:37:21','2024-09-10 19:37:21','YQ1u/7z7wRMEBzbtspXE','available'),(35,4,6,5,'5','2024-09-10 19:37:21','2024-09-10 19:37:21','1l2W/AXmAzicROcFeShD','available'),(36,4,6,6,'6','2024-09-10 19:37:21','2024-09-10 19:37:21','u7aQK+im6TB8irvFDtsQ','available'),(37,4,6,7,'7','2024-09-10 19:37:21','2024-09-10 19:37:21','6kIMPlqJlceTqcG91u/7','available'),(38,4,6,8,'8','2024-09-10 19:37:21','2024-09-10 19:37:21','hDQXyh06iLmGh83/t+BQ','available'),(39,4,6,9,'9','2024-09-10 19:37:21','2024-09-10 19:37:21','cLeSTVz4L0B5L63TBGB4','available'),(40,4,6,10,'10','2024-09-10 19:37:21','2024-09-10 19:37:21','y7yM6+7GqwTok2KcRaXZ','available'),(41,3,5,1,'1','2024-09-10 19:37:44','2024-09-10 19:37:44','Uh+h7T4TMVkmTuo=','available'),(42,3,5,2,'2','2024-09-10 19:37:44','2024-09-10 19:37:44','vT7y4tmoP1j+oYQ=','available'),(43,3,5,3,'3','2024-09-10 19:37:44','2024-09-10 19:37:44','EKu84N0ctnnC8S8=','available'),(44,3,5,4,'4','2024-09-10 19:37:44','2024-09-10 19:37:44','fBFl87+z118fCzU=','available'),(45,3,5,5,'5','2024-09-10 19:37:44','2024-09-10 19:37:44','y0Gd8AauFXSHSOQ=','available'),(46,3,5,6,'6','2024-09-10 19:37:44','2024-09-10 19:37:44','pqqbJ+vu/3xnhrg=','available'),(47,3,5,7,'7','2024-09-10 19:37:44','2024-09-10 19:37:44','914HMlnBg4uIpcI=','available'),(48,3,5,8,'8','2024-09-10 19:37:44','2024-09-10 19:37:44','mSgcxh5ynvWdi84=','available'),(49,3,5,9,'9','2024-09-10 19:37:44','2024-09-10 19:37:44','bauZQV+wOQxiI64=','available'),(50,3,5,10,'10','2024-09-10 19:37:44','2024-09-10 19:37:44','1qCH5+2OvUjzn2E=','available'),(51,2,4,1,'1','2024-09-10 19:37:49','2024-09-11 12:01:20','WQ+p+j5Kflw7X+42JA==','full'),(52,2,4,2,'2','2024-09-10 19:37:49','2024-09-11 10:12:12','ti769dnxcF3jsIALjg==','full'),(53,2,4,3,'3','2024-09-10 19:37:49','2024-09-11 20:54:41','G7u0991F+Xzf4Cv5LA==','waiting'),(54,2,4,4,'4','2024-09-10 19:37:49','2024-09-10 19:37:49','dwFt5L/qmFoCGjH4ug==','available'),(55,2,4,5,'5','2024-09-10 19:37:49','2024-09-10 22:00:22','wFGV5wb3WnGaWeAQcQ==','ready'),(56,2,4,6,'6','2024-09-10 19:37:49','2024-09-10 22:01:25','rbqTMOu3sHl6l7zQBg==','ready'),(57,2,4,7,'7','2024-09-10 19:37:49','2024-09-10 19:37:49','/E4PJVmYzI6VtMao3g==','available'),(58,2,4,8,'8','2024-09-10 19:37:49','2024-09-10 19:37:49','kjgU0R4r0fCAmsrqvw==','available'),(59,2,4,9,'9','2024-09-10 19:37:49','2024-09-10 19:37:49','ZruRVl/pdgl/MqrGDA==','available'),(60,2,4,10,'10','2024-09-10 19:37:49','2024-09-10 19:37:49','3bCP8O3X8k3ujmWJTQ==','available');
+/*!40000 ALTER TABLE `qr_tables` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_taxes`
+--
+
+DROP TABLE IF EXISTS `qr_taxes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_taxes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `internal_name` varchar(64) DEFAULT NULL,
+  `name` varchar(64) DEFAULT NULL,
+  `description` varchar(256) DEFAULT NULL,
+  `value` decimal(10,2) DEFAULT NULL,
+  `value_type` enum('percentage','fixed') DEFAULT NULL,
+  `type` enum('inclusive','exclusive') DEFAULT NULL,
+  `billing_type` enum('personal','business','both') DEFAULT NULL,
+  `countries` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_taxes`
+--
+
+LOCK TABLES `qr_taxes` WRITE;
+/*!40000 ALTER TABLE `qr_taxes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_taxes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_testimonials`
+--
+
+DROP TABLE IF EXISTS `qr_testimonials`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_testimonials` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `designation` varchar(255) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `translations` longtext DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_testimonials`
+--
+
+LOCK TABLES `qr_testimonials` WRITE;
+/*!40000 ALTER TABLE `qr_testimonials` DISABLE KEYS */;
+INSERT INTO `qr_testimonials` VALUES (1,'Natasha','Designer','Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium cumque dolor ducimus ea error exercitationem hic in ipsa minima odio odit, porro quia sapiente sed similique sint totam! Mollitia, porro?','default_user.png',NULL,'2024-05-09 00:34:11','2024-05-09 00:34:11'),(2,'John','Writer','Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium cumque dolor ducimus ea error exercitationem hic in ipsa minima odio odit, porro quia sapiente sed similique sint totam! Mollitia, porro?','default_user.png',NULL,'2024-05-09 00:35:48','2024-05-09 00:35:48');
+/*!40000 ALTER TABLE `qr_testimonials` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_transaction`
+--
+
+DROP TABLE IF EXISTS `qr_transaction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_transaction` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_name` varchar(225) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `status` enum('pending','success','failed','cancel') DEFAULT NULL,
+  `amount` double DEFAULT NULL,
+  `base_amount` double DEFAULT NULL,
+  `currency_code` varchar(3) DEFAULT NULL,
+  `payment_id` varchar(255) DEFAULT NULL,
+  `transaction_gatway` varchar(255) DEFAULT NULL,
+  `transaction_method` varchar(20) DEFAULT NULL,
+  `transaction_description` varchar(255) DEFAULT NULL,
+  `transaction_ip` varchar(15) DEFAULT NULL,
+  `frequency` enum('MONTHLY','YEARLY','LIFETIME') DEFAULT NULL,
+  `billing` text DEFAULT NULL,
+  `taxes_ids` text DEFAULT NULL,
+  `details` text DEFAULT NULL,
+  `coupon` text DEFAULT NULL,
+  `featured` enum('0','1') DEFAULT '0',
+  `urgent` enum('0','1') DEFAULT '0',
+  `highlight` enum('0','1') DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_transaction`
+--
+
+LOCK TABLES `qr_transaction` WRITE;
+/*!40000 ALTER TABLE `qr_transaction` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_transaction` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_upgrades`
+--
+
+DROP TABLE IF EXISTS `qr_upgrades`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_upgrades` (
+  `upgrade_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sub_id` varchar(16) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `pay_mode` enum('one_time','recurring') NOT NULL DEFAULT 'one_time',
+  `interval` enum('MONTHLY','YEARLY','LIFETIME') DEFAULT NULL,
+  `upgrade_lasttime` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `upgrade_expires` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `unique_id` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`upgrade_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_upgrades`
+--
+
+LOCK TABLES `qr_upgrades` WRITE;
+/*!40000 ALTER TABLE `qr_upgrades` DISABLE KEYS */;
+INSERT INTO `qr_upgrades` VALUES (4,'3',1,'one_time',NULL,1724596898,1728594000,NULL,'Active');
+/*!40000 ALTER TABLE `qr_upgrades` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_user`
+--
+
+DROP TABLE IF EXISTS `qr_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_type` enum('user','admin') NOT NULL DEFAULT 'user',
+  `group_id` varchar(16) DEFAULT 'free',
+  `username` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `name` varchar(225) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `image` varchar(225) NOT NULL DEFAULT 'default_user.png',
+  `balance` double(10,2) NOT NULL DEFAULT 0.00,
+  `country_code` char(50) DEFAULT NULL,
+  `country` varchar(50) DEFAULT NULL,
+  `oauth_provider` enum('','facebook','google','twitter') DEFAULT NULL,
+  `oauth_uid` varchar(100) DEFAULT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `lastactive` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `qr_user_username_unique` (`username`),
+  UNIQUE KEY `qr_user_email_unique` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_user`
+--
+
+LOCK TABLES `qr_user` WRITE;
+/*!40000 ALTER TABLE `qr_user` DISABLE KEYS */;
+INSERT INTO `qr_user` VALUES (1,'admin','3','kabudigital','kadirdurmazlar@gmail.com','Kadir','$2y$10$IqxunP6tekGbX6VJ7LLeXeuHcOn8DLqVNCcrcUtu.E/B.gIdBNbLy','default_user.png',0.00,'TR','Turkey',NULL,NULL,'2024-08-19 12:14:47','vHn5CZEZef6mldPQeEQrJf4jiUIY3oQsPE9DoaprsxooRBbLppTFvhnApPLb',1,'2024-09-15 13:25:58','2024-08-19 15:14:47','2024-09-15 13:25:58'),(2,'user','free','lezzetduragi','info@lezzetduragi.com','Lezzet Durağı','$2y$10$y/UxZR2iuOd.pTpTHKup6eAJhaa9hNrTM8FciMP/RKbJhdBhjtO32','default_user.png',0.00,'TR','Turkey',NULL,NULL,'2024-09-08 19:38:02',NULL,1,'2024-09-11 22:30:32','2024-09-08 19:38:02','2024-09-11 22:30:32'),(3,'user','free','gurmebahce','iletisim@gurmebahce.com','Gurme Bahçe','$2y$10$tErsz05sJgINAatakSKeQ.9zB937fVNZ8rMfFR3iXcsIsEVQLOI4O','default_user.png',0.00,'TR','Turkey',NULL,NULL,'2024-09-08 20:06:19',NULL,1,'2024-09-08 20:13:31','2024-09-08 20:06:19','2024-09-08 20:13:31'),(4,'user','free','info@ziyafetsofrasi.com','info@ziyafetsofrasi.com','Ziyafet Sofrası','$2y$10$oN72UyjmL2xJoY2/UW96NOEKKqcyfYy6/AisfSvYmR/Y0t.LX8KI2','default_user.png',0.00,'TR','Turkey',NULL,NULL,'2024-09-08 20:14:27',NULL,1,'2024-09-08 20:23:35','2024-09-08 20:14:27','2024-09-08 20:23:35'),(5,'user','free','mavi.deniz','rezervasyon@mavideniz.com','Mavi Deniz','$2y$10$89H0Rejn4wLvIToQ5xQUWe0yckXULxLcFrS9Lt.CEk5dOaE90CGde','default_user.png',0.00,'TR','Turkey',NULL,NULL,'2024-09-08 20:25:04',NULL,1,'2024-09-09 14:05:49','2024-09-08 20:25:04','2024-09-09 14:05:49'),(6,'user','free','lokmaduragi','info@lokmaduragi.com','Lokma Durağı','$2y$10$uS23XCR6x59nRcmsFu/zCeLxitNi3gV9nqXSgR7bjNZgNRJkEyCRm','default_user.png',0.00,'TR','Turkey',NULL,NULL,'2024-09-08 20:35:45',NULL,1,'2024-09-11 16:06:45','2024-09-08 20:35:45','2024-09-11 16:06:45'),(7,'user','free','kahve-bahcesi','rezervasyon@kahvebahcesi.com','Kahve Bahçesi','$2y$10$lyE0FVuOS2hinPqo5y0/fetyDhDc/TEmxi9YjzHTP/beucCb3SQCO','default_user.png',0.00,'TR','Turkey',NULL,NULL,'2024-09-08 21:16:38',NULL,1,'2024-09-12 23:46:48','2024-09-08 21:16:38','2024-09-12 23:46:48');
+/*!40000 ALTER TABLE `qr_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_user_options`
+--
+
+DROP TABLE IF EXISTS `qr_user_options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_user_options` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `option_name` varchar(191) DEFAULT NULL,
+  `option_value` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_user_options`
+--
+
+LOCK TABLES `qr_user_options` WRITE;
+/*!40000 ALTER TABLE `qr_user_options` DISABLE KEYS */;
+INSERT INTO `qr_user_options` VALUES (1,1,'package_trial_done','1'),(2,1,'billing_details_type','personal'),(3,1,'billing_tax_id',NULL),(4,1,'billing_name','Kadir Durmazlar'),(5,1,'billing_address','kadirdurmazlar@gmail.com'),(6,1,'billing_city','Eskişehir'),(7,1,'billing_state','Odunpazarı'),(8,1,'billing_zipcode','26000'),(9,1,'billing_country','TR');
+/*!40000 ALTER TABLE `qr_user_options` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qr_waiter_call`
+--
+
+DROP TABLE IF EXISTS `qr_waiter_call`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_waiter_call` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `restaurant_id` int(11) DEFAULT NULL,
+  `table_no` int(11) DEFAULT NULL,
+  `seen` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `restaurant_id` (`restaurant_id`),
+  CONSTRAINT `qr_waiter_call_restaurant_id_foreign` FOREIGN KEY (`restaurant_id`) REFERENCES `qr_posts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qr_waiter_call`
+--
+
+LOCK TABLES `qr_waiter_call` WRITE;
+/*!40000 ALTER TABLE `qr_waiter_call` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qr_waiter_call` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-09-16 13:51:11

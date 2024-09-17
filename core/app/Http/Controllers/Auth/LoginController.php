@@ -36,6 +36,7 @@ class LoginController extends Controller
         $this->activeTheme = active_theme();
     }
 
+    
     /**
      * Get the login username to be used by the controller.
      *

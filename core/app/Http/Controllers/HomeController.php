@@ -25,6 +25,10 @@ class HomeController extends Controller
         $this->activeTheme = active_theme();
      
     }
+    public function landingpage(){
+
+     return view('landingpage.index');
+ }
 
 public function blankpage(){
      $sifre= coffecraft_xor_decrypt("G7u0991F+Xzf4Cv5LMP7NZB2AjJW" ,"3");

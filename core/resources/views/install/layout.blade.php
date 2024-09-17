@@ -10,7 +10,6 @@
     <title>{{___('Installation')}} - {{config('appinfo.name')}}</title>
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('storage/logo/favicon.png') }}">
 
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/global/fonts/css/fontawesome.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/installer/style.css') }}">
 </head>

@@ -54,6 +54,7 @@ Route::group($middlewares, function () {
         Route::get('privacyPolicy', 'privacyPolicy')->name('privacyPolicy');
         Route::get('cookiePolicy', 'cookiePolicy')->name('cookiePolicy');
 Route::get('blank','blankpage')->name('blankpage');
+Route::get('/landingpage', 'landingpage')->name('landingpage.index');
 
 
 Route::get('test','testpage')->name('unsplash.search');
@@ -208,7 +209,6 @@ Route::post('/save-image', [UnSplashController::class, 'saveImage'])->name('unsp
         Route::redirect('/', 'admin/dashboard');
 
         Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-
         Route::get('/posts', 'PostController@index')->name('posts.index');
         Route::post('posts.delete', 'PostController@delete')->name('posts.delete');
 

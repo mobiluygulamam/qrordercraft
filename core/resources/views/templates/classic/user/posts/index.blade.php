@@ -43,7 +43,7 @@
                                 </div>
                             </div>
                         </div>
-
+                   
                         <!-- Buttons -->
                         <div class="buttons-to-right always-visible">
                             <a href="{{ route('restaurants.menu', $post->id) }}"
@@ -65,12 +65,7 @@
                                class="button gray ripple-effect ico" title="{{ ___('Edit') }}"
                                data-tippy-placement="top"><i
                                     class="icon-feather-edit"></i></a>
-                            @if(is_plugin_enabled('quickorder'))
-                                <a href="{{ route('restaurants.whatsappOrdering', $post->id) }}"
-                                   class="button whatsapp ripple-effect ico" title="{{ ___('WhatsApp Ordering') }}"
-                                   data-tippy-placement="top"><i
-                                        class="fab fa-whatsapp"></i></a>
-                            @endif
+                       
                             <a href="{{ route('restaurants.destroy', $post->id) }}"
                                class="button red ripple-effect ico item-ajax-button"
                                data-alert-message="{{ ___('Are you sure?') }}" data-ajax-action="deleteVCard"

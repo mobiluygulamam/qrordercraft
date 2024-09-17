@@ -35,6 +35,8 @@ use Illuminate\Support\Facades\Validator;
 use Pusher\Pusher;
 use App\Events\OrderTrackingEvent;
 use App\Events\UpdateTableTrackingEvent;
+use Illuminate\Support\Facades\DB;
+
 class PostController extends Controller
 {
 
@@ -67,10 +69,19 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $templates = $this->getPostTemplates();
-        return view($this->activeTheme.'.user.posts.create', compact('templates'));
+    $user_id= $request->user()->id;
+    $group_id="free";
+    $maxTableCount=10;
+    $plan=Plan::where('id', $request->user()->group_id)->first();
+   if (!is_null($plan)) {
+     $group_id=$plan->id;
+   }
+   $maxTableCount=$plan->tablecount;
+
+    $templates = $this->getPostTemplates();
+        return view($this->activeTheme.'.user.posts.create', compact(['templates','maxTableCount']));
     }
 
     /**
@@ -81,12 +92,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+     
         if (!config('settings.non_active_allow') && !$request->user()->hasVerifiedEmail()) {
             quick_alert_error(___('Verify your email address to post any content.'));
             return back()->withInput();
         }
 
         $validator = Validator::make($request->all(), [
+      
             'color' => ['required'],
             'cover_image' => ['required', 'image', 'mimes:png,jpg,jpeg', 'max:2048'],
             'main_image' => ['required', 'image', 'mimes:png,jpg,jpeg', 'max:2048'],
@@ -97,6 +110,7 @@ class PostController extends Controller
             'address' => ['required', 'string', 'max:255'],
             'timing' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:20'],
+            'tablecount'=>['required'],
           //   'restaurant_template' => ['required'],
         ]);
         if ($validator->fails()) {
@@ -109,10 +123,11 @@ class PostController extends Controller
 
         $cover_image = image_upload($request->file('cover_image'), 'storage/restaurant/cover/', '300');
         $main_image = image_upload($request->file('main_image'), 'storage/restaurant/logo/', '200x200');
-
+       
         $post = Post::create([
             'user_id' => request()->user()->id,
             'color' => $request->color,
+            'tablecount' => $request->tablecount,
             'title' => $request->title,
             'slug' => !empty($request->slug)
                 ? $request->slug
@@ -139,7 +154,8 @@ class PostController extends Controller
             PostOption::updatePostOption($post->id, $key, $value);
         }
         
-      
+      //masaları ekle
+      setUserTables($post,request()->user() );
         quick_alert_success(___('Saved Successfully.'));
 
         return redirect()->route('restaurants.index');
@@ -356,7 +372,15 @@ class PostController extends Controller
     public function destroy(Post $restaurant)
     {
         if ($restaurant->user_id == request()->user()->id) {
-            $restaurant->delete();
+          $tables = BusinessTable::where('restoid', $restaurant->id)->get();
+        
+          if ($tables->isNotEmpty()) {
+                DB::transaction(function () use ($restaurant) {
+               BusinessTable::where('restoid', $restaurant->id)->delete();
+               // Diğer işlemler burada yapılabilir
+           });
+          }
+          
         }
         $result = array(
             'success' => true,
@@ -1735,12 +1759,12 @@ $postDetail=['resImageUrl'=>$resImageUrl,'title'=>$post->title, 'postid'=>$post-
                 return to_route('restaurants.orders', $restaurant->id);
             }
         }
-        event(new OrderTrackingEvent(request()->user()->orders));
+      
         if(!$restaurant){
             quick_alert_error(___('No restaurants available.') .' '. ___('Add New Restaurant'));
             return redirect()->route('restaurants.create');
         }
-
+        event(new OrderTrackingEvent(request()->user()->orders));
         $post = $restaurant;
         if ($restaurant->user_id == request()->user()->id) {
 

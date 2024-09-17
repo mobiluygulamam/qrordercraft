@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Adsense;
+use App\Models\Post;
 use App\Models\BusinessTable;
 use App\Models\Country;
 use App\Models\DeviceUser;
@@ -967,3 +968,34 @@ function quick_alert_info($message)
 {
     quick_alert($message, 'info');
 }
+
+
+ function setUserTables( $post, $user){
+  
+  if(!is_null($user)&&!is_null($post)){
+     $planidstr=  $user->group_id;
+     $tablecount=10;
+     if ($planidstr!="free") {
+          $plan=  Plan::where('id',intval($planidstr))->first();
+          $tablecount=$plan->tablecount; 
+   }
+
+    $tablesArr=[];
+    $userTableCount=BusinessTable::where('userid', $user->id)->count();
+    $avaibletablecount=$tablecount-$userTableCount;
+         for ($i=1; $i <=$avaibletablecount ; $i++) { 
+              $table=BusinessTable::create(
+                   ["userid"=>$user->id,
+                   "restoid"=>$post->id,
+                   "table_id"=>$i,
+                   "qr_text"=>coffecraft_xor_encrypt($post->slug,$i),
+                   "url"=>strval($i),
+
+              ]);
+              $tablesArr[$i]=$table;
+         }
+    
+        return $tablesArr;
+   } else return [];
+} 
+   

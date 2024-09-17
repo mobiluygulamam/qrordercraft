@@ -38,17 +38,21 @@ public function __construct(){
  function index(){
      $getUser=auth()->user();
      $getUserPosts=Post::where('user_id',$getUser->id)->get();
-     $feedbackModel = Feedback::where('restaurant_id',$getUserPosts[0]->id)
-     ->with('status') // Durum bilgisi
-     ->get();
      $feedbacks=[];
-     foreach($feedbackModel as $feedback){
+     if (!$getUserPosts->isEmpty()) {
+          $feedbackModel = Feedback::where('restaurant_id',$getUserPosts[0]->id)
+          ->with('status') // Durum bilgisi
+          ->get();
+      
+          foreach($feedbackModel as $feedback){
+            
+     
+              $item=["id"=>$feedback->id,"rating"=>$feedback->rating,"comment"=>$feedback->comment,"restoranname"=>$getUserPosts[0]->title];
+              array_push($feedbacks,$item);
+          }
        
-
-         $item=["id"=>$feedback->id,"rating"=>$feedback->rating,"comment"=>$feedback->comment,"restoranname"=>$getUserPosts[0]->title];
-         array_push($feedbacks,$item);
      }
-
+  
      return view($this->activeTheme.'user.feedbacks.index',compact('feedbacks'));
 
  }

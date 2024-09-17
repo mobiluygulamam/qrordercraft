@@ -827,4 +827,9 @@ return array (
   'provided_by_kabudigital' => 'Provided by Kabudigital',
   'new_order' => 'Yeni Sipariş',
   'submit_order' => 'Sipariş Oluştur',
+  'header_message' => 'Hızlı sipariş, mutlu müşteri CraftOrder ile işletmenizi büyütün',
+  'header_sub_message' => 'Müşterilerinize özel hızlı ve unutulmaz bir menü deneyimi sunun.',
+  'get_started' => 'Başlayalım',
+  'create_an_menu_in_1min' => '50 saniye içinde menü oluşturun, satışlarınızı katlayın',
+
 );

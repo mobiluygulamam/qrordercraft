@@ -10,6 +10,15 @@
     <title>{{ page_title($__env) }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('storage/logo/'.$settings->site_favicon) }}">
     @include('admin.includes.styles')
+    <script src="https://cdn.tailwindcss.com"></script>
+
+     <script>
+     tailwind.config = {
+         prefix: "tw-",
+         corePlugins: {
+             preflight: false,
+         }
+     };
 </head>
 <body>
 <!-- Layout wrapper -->

@@ -66,6 +66,12 @@
                         </div>
                     </div>
                     <div class="col-xl-6">
+                         <label class="form-label" for="field_limit">{{ ___('table_count') }} *</label>
+                         <input name="tablecount" type="number" class="form-control" id="tablecount" value="10" max="{{ $maxTableCount }}">
+
+                     </div>
+                     <div class="col-xl-6"></div>
+                    <div class="col-xl-6">
                         <div class="submit-field">
                             <h5>{{ ___('Logo') }}</h5>
                             <div class="input-file">
@@ -139,6 +145,17 @@
 
 @push('scripts_at_bottom')
     <script>
+     
+    document.getElementById('tablecount').addEventListener('input', function (event) {
+        var max = {{ $maxTableCount }};
+        var value = parseInt(event.target.value);
+        if (value > max) {
+            event.target.value = max;
+        }
+    });
+
+
+
         initColorPicker('.qr-restaurant-color-wrapper');
 
         function initColorPicker(container) {
