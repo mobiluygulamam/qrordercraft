@@ -22,7 +22,6 @@
         var rtl = false;
     }
 </script>
-
 <script src="{{ asset($activeThemeAssets.'js/chosen.min.js') }}"></script>
 <script src="{{ asset('assets/global/js/jquery.lazyload.min.js') }}"></script>
 <script src="{{ asset('assets/global/js/tippy.all.min.js') }}"></script>

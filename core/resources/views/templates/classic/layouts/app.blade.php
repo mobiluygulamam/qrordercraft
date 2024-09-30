@@ -100,5 +100,7 @@
 
 @include($activeTheme.'layouts.includes.addons')
 @include($activeTheme.'layouts.includes.scripts')
+<script src="https://cdn.popupsmart.com/bundle.js" data-id="897214" async defer></script>
+
 </body>
 </html>

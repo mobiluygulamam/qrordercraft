@@ -2,7 +2,7 @@
     <!-- Personel Bilgileri -->
     <div>
         <h3 class="tw-text-xl tw-font-semibold tw-mb-2">{{ $member->name }} {{ $member->surname }}</h3>
-        <p class="tw-text-gray-500 tw-mb-4">{{ __('Staff ID') }}: {{ $member->id }}</p>
+        <p class="tw-text-gray-500 tw-mb-4">{{ ___('staff_id') }}: {{ $member->id }}</p>
         @php
             $post = App\Models\Post::where('id', $member->restaurant_id)->first();
         @endphp

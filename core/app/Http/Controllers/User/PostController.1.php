@@ -379,17 +379,13 @@ class PostController extends Controller
                BusinessTable::where('restoid', $restaurant->id)->delete();
                // Diğer işlemler burada yapılabilir
            });
-           
-
           }
           
         }
-        Post::where('id', $restaurant->id)->delete();
         $result = array(
             'success' => true,
             'message' => ___('Deleted Successfully')
         );
-        
         return response()->json($result, 200);
 
     }
@@ -1908,7 +1904,6 @@ public function getOrderByTablenumber(Request $request, int $id){
     
         // 2. Veritabanında masa durumunu güncelliyoruz
         $table = BusinessTable::find($tableId);
-       
         $table->status = $status;
         $table->save();
     
@@ -2185,7 +2180,7 @@ public function getOrderByTablenumber(Request $request, int $id){
  
          WaiterCall::create([
              'restaurant_id' => $restaurant->id,
-             'table_no' => $request->get('table_number')
+             'table_no' => $request->get('table')
          ]);
  
          $result = ['success' => true, 'message' => ___('Saved Successfully')];
@@ -2237,9 +2232,9 @@ public function getOrderByTablenumber(Request $request, int $id){
          $amount = $delivery_charge = 0;
          if ($request->get('ordering-type') == 'on-table') {
              /* on table */
-             $order->table_number = $request->get('table_number');
+             $order->table_number = $request->get('table');
  
-             $customer_details .= $icon_hash.' '.$request->get('table_number');
+             $customer_details .= $icon_hash.' '.$request->get('table');
  
              $order_type = ___('On table');
          } else {
@@ -2357,7 +2352,7 @@ public function getOrderByTablenumber(Request $request, int $id){
              $restaurant->user->sendMail(new RestaurantOrder([
                  'restaurant_name' => $restaurant->title,
                  'customer_name' => $request->get('name'),
-                 'table_number' => $request->get('table_number'),
+                 'table_number' => $request->get('table'),
                  'phone_number' => $request->get('phone-number'),
                  'address' => $request->get('address'),
                  'order_type' => $order_type,
@@ -2419,459 +2414,227 @@ public function sendOrderTest(Request $request, Post $restaurant){
      return response()->json($result);
 }
 
-public function sendOrderTable(Request $request, Post $restaurant)
-{
-    $validator = Validator::make($request->all(), [
 
-        
-    ]);
-    
-    if ($validator->fails()) {
-        foreach ($validator->errors()->all() as $error) {
-            $errors[] = $error;
-        }
-        $result = ['success' => false, 'message' => implode('<br>', $errors)];
-        return response()->json($result);
-    }
-
-    $order = new Order();
-    $order->restaurant_id = $restaurant->id;
-    $order->type = $request->get('ordering-type') ?? "on-table";
-    $order->customer_name = $request->get('name');
-
-    $customer_details = $request->get('name')."\n";
-
-    $icon_menu_item = "▪️";
-    $icon_menu_extra = "▫️";
-    $icon_phone = "☎️";
-    $icon_hash = "#️⃣";
-    $icon_address = "📌";
-    $icon_message = "📝";
-
-    $order_type = '';
-    $amount = $delivery_charge = 0;
-    
-    if ($request->get('ordering-type') == 'on-table') {
-        /* on table */
-        $order->table_number = intval($request->get('table_number'));
-
-        $customer_details .= $icon_hash.' '.$request->get('table_number');
-        $table = BusinessTable::find($order->table_number );
-        $table->status = "full";
-        $table->save();
-    
-        // 3. Event'i tetikleyerek Pusher aracılığıyla anlık güncelleme gönderiyoruz
-      $eventStatus=  event(new UpdateTableTrackingEvent($table));
-        $order_type = ___('On table');
-    } else {
-        if ($request->get('ordering-type') == 'takeaway') {
-            /* takeaway */
-            $order->phone_number = $request->get('phone-number');
-
-            $customer_details .= $icon_phone.' '.$request->get('phone-number');
-
-            $order_type = ___('Takeaway');
-        } else {
-            if ($request->get('ordering-type') == 'delivery') {
-                /* delivery */
-                $order->phone_number = $request->get('phone-number');
-                $order->address = $request->get('address');
-
-                $customer_details .= $icon_phone.' '.$request->get('phone-number')."\n";
-                $customer_details .= $icon_address.' '.$request->get('address');
-
-                $order_type = ___('Delivery');
-                $delivery_charge = post_options($restaurant->id, 'restaurant_delivery_charge', 0);
-            }
-        }
-    }
-
-    if (!empty($_POST['message'])) {
-        $customer_details .= "\n".$icon_message.' '.$request->get('message')."\n";
-    }
-
-    $order->message = $request->get('message');
-    $order->created_at = Carbon::now();
-
-    if ($request->get('pay_via') == 'pay_online') {
-        $order->status = 'unpaid';
-    }
-
-    $order->save();
-    $result['order']=$order;
-    $itemsr = $request->get('items');
-    $items = [];
-    
-    // Gelen veri dizi ise direkt atama yapın, değilse JSON decode ile işleyin.
-    if (is_array($itemsr)) {
-        $items = $itemsr;
-    } else {
-        $items = json_decode($itemsr, true); // true, decode işlemini array olarak döndürür.
-    }
-
-    $order_msg = $order_whatsapp_detail = '';
-    foreach ($items as $item_id => $item) {
-     // Dizi indeksleme yöntemiyle verilere ulaşın
-     $quantity = $item['quantity'];
-     
-     // Variants kısmı opsiyonel olabilir, kontrol edin
-     $variants = isset($item['variants']) ? $item['variants'] : null;
+     public function sendOrderTable(Request $request, Post $restaurant)
+     {
+         $validator = Validator::make($request->all(), [
+  
+             
+         ]);
+         if ($validator->fails()) {
+             foreach ($validator->errors()->all() as $error) {
+                 $errors[] = $error;
+             }
+             $result = ['success' => false, 'message' => implode('<br>', $errors)];
+             return response()->json($result);
+         }
  
-     // Menüyü bulma işlemi
-     $menu = Menu::find($item_id);
-
-     if ($menu) {
-            /* save order items */
-            $order_item = OrderItem::create([
-                'order_id' => $order->id,
-                'item_id' => $item_id,
-                'quantity' => $quantity,
-                'variation' => is_numeric($variants) ? $variants : 0,
-            ]);
+         $order = new Order();
+         $order->restaurant_id = $restaurant->id;
+         $order->type = $request->get('ordering-type') ?? "on-table";
+         $order->customer_name = $request->get('name');
+ 
+         $customer_details = $request->get('name')."\n";
+ 
+         $icon_menu_item = "▪️";
+         $icon_menu_extra = "▫️";
+         $icon_phone = "☎️";
+         $icon_hash = "#️⃣";
+         $icon_address = "📌";
+         $icon_message = "📝";
+ 
+         $order_type = '';
+         $amount = $delivery_charge = 0;
+         if ($request->get('ordering-type') == 'on-table') {
+             /* on table */
+             $order->table_number = $request->get('table');
+ 
+             $customer_details .= $icon_hash.' '.$request->get('table');
+ 
+             $order_type = ___('On table');
+         } else {
+             if ($request->get('ordering-type') == 'takeaway') {
+                 /* takeaway */
+                 $order->phone_number = $request->get('phone-number');
+ 
+                 $customer_details .= $icon_phone.' '.$request->get('phone-number');
+ 
+                 $order_type = ___('Takeaway');
+             } else {
+                 if ($request->get('ordering-type') == 'delivery') {
+                     /* delivery */
+                     $order->phone_number = $request->get('phone-number');
+                     $order->address = $request->get('address');
+ 
+                     $customer_details .= $icon_phone.' '.$request->get('phone-number')."\n";
+                     $customer_details .= $icon_address.' '.$request->get('address');
+ 
+                     $order_type = ___('Delivery');
+                     $delivery_charge = post_options($restaurant->id, 'restaurant_delivery_charge', 0);
+                 }
+             }
+         }
+ 
+         if (!empty($_POST['message'])) {
+             $customer_details .= "\n".$icon_message.' '.$request->get('message')."\n";
+         }
+ 
+         $order->message = $request->get('message');
+         $order->created_at = Carbon::now();
+ 
+         if ($request->get('pay_via') == 'pay_online') {
+             $order->status = 'unpaid';
+         }
+ 
+         $order->save();
+ 
+         $itemsr = $request->get('items');
+         $items = [];
          
+         // Gelen veri dizi ise direkt atama yapın, değilse JSON decode ile işleyin.
+         if (is_array($itemsr)) {
+             $items = $itemsr;
+         } else {
+             $items = json_decode($itemsr, true); // true, decode işlemini array olarak döndürür.
+         }
 
-            $variant_title = array();
-            if (is_numeric($variants)) {
-                $menu_variant = MenuVariant::query()
-                    ->where('menu_id', $item_id)
-                    ->find($variants);
-
-                if ($menu_variant) {
-                    $menu->price = $menu_variant->price;
-
-
-                    foreach ($menu_variant->options as $option_id => $option_key) {
-                        $menu_variant_option = MenuVariantOption::find($option_id);
-
-                        $options = $menu_variant_option->getOriginal('options');
-                        $variant_title[] = $options[$option_key];
-                    }
-                }
-            }
-            $variant_title = !empty($variant_title) ? ' ('.implode(', ', $variant_title).')' : '';
-
-            $amount += $menu->price * $quantity;
-
-            $order_msg .= $menu->getOriginal('name').$variant_title.($quantity > 1 ? ' &times; '.$quantity : '').'<br>';
-
-            $order_whatsapp_detail .= $icon_menu_item.$menu->getOriginal('name').$variant_title.' X '.$quantity."\n";
-
-            $extras = $item->extras??[];
-            foreach ($extras as $extra) {
-                $menu_extra = MenuExtra::find($extra->id);
-
-                if ($menu_extra) {
-                    // save order items extras
-                    OrderItemExtra::create([
-                        'order_item_id' => $order_item->id,
-                        'extra_id' => $extra->id,
-                    ]);
-
-                    $amount += $menu_extra->price * $quantity;
-
-                    $order_msg .= $menu_extra->getOriginal('title').'<br>';
-
-                    $order_whatsapp_detail .= "\t".$icon_menu_extra.$menu_extra->getOriginal('title')."\n";
-                }
-            }
-            $order_msg .= '<br>';
-        }
-    }
-    $amount += $delivery_charge;
-
-    /* Update currency */
-    config(['settings.currency_sign' => post_options($restaurant->id, 'currency_sign')]);
-    config(['settings.currency_pos' => post_options($restaurant->id, 'currency_pos')]);
-    config(['settings.currency_code' => post_options($restaurant->id, 'currency_code')]);
-
-    /* Send email to restaurant owner */
-    if (post_options($restaurant->id, 'restaurant_send_order_notification', 1)) {
-
-        $restaurant->user->sendMail(new RestaurantOrder([
-            'restaurant_name' => $restaurant->title,
-            'customer_name' => $request->get('name'),
-            'table_number' => $request->get('table_number'),
-            'phone_number' => $request->get('phone-number'),
-            'address' => $request->get('address'),
-            'order_type' => $order_type,
-            'order' => $order_msg,
-            'message' => $request->get('message'),
-        ]));
-    }
-    $orderItems=$order->items;
-
-    $result = ['success' => true, 'message' => '', 'whatsapp_url' => '', 'order'=>json_encode($order),"table_id"=>$request->get('table_number'),"created_at"=>$order->created_at_formatted, 
-    "orderItems" =>$orderItems];
-
-    /* Whatsapp Ordering Plugin */
-    if(is_plugin_enabled('quickorder') && post_options($restaurant->id, 'quickorder_enable')){
-        $whatsapp_number = post_options($restaurant->id, 'whatsapp_number');
-        $whatsapp_message = post_options($restaurant->id, 'whatsapp_message');
-
-        if (empty($whatsapp_message))
-            $whatsapp_message = config('settings.quickorder_whatsapp_message');
-
-        $short_codes = [
-            '{ORDER_ID}' => $order->id,
-            '{ORDER_DETAILS}' => $order_whatsapp_detail,
-            '{CUSTOMER_DETAILS}' => $customer_details,
-            '{ORDER_TYPE}' => $order_type,
-            '{ORDER_TOTAL}' => price_code_format($amount)
-        ];
-
-        $whatsapp_message = str_replace(array_keys($short_codes), array_values($short_codes), $whatsapp_message);
-
-        $result['whatsapp_url'] = 'https://api.whatsapp.com/send?phone=' . $whatsapp_number . '&text=' . urlencode($whatsapp_message);
-    }
-
-    if ($request->get('pay_via') == 'pay_online') {
-
-        /* Create transaction to store all the details for further actions */
-        $transaction = Transaction::create([
-            'product_name' => $restaurant->title.' (#'.$order->id.')',
-            'product_id' => $order->id,
-            'user_id' => $restaurant->id,
-            'base_amount' => $amount,
-            'amount' => $amount,
-            'currency_code' => post_options($restaurant->id, 'currency_code'),
-            'transaction_method' => 'order',
-            'transaction_ip' => $request->ip(),
-            'transaction_description' => $restaurant->title.' (#'.$order->id.')',
-            'details' => [
-                'whatsapp_url' => $result['whatsapp_url'],
-                'customer_name' => $request->get('name'),
-                'phone' => $request->get('phone-number'),
-            ]
-        ]);
-
-        $result['message'] = route('payment.index', $transaction->id);
-        
-    }
-
-    return response()->json($result);
-}
-
-public function sendOrderTable2(Request $request, Post $restaurant)
-{
-    $validator = Validator::make($request->all(), [
-
-        
-    ]);
-    if ($validator->fails()) {
-        foreach ($validator->errors()->all() as $error) {
-            $errors[] = $error;
-        }
-        $result = ['success' => false, 'message' => implode('<br>', $errors)];
-        return response()->json($result);
-    }
-
-    $order = new Order();
-    $order->restaurant_id = $restaurant->id;
-    $order->type = $request->get('ordering-type') ?? "on-table";
-    $order->customer_name = $request->get('name');
-
-    $customer_details = $request->get('name')."\n";
-
-    $icon_menu_item = "▪️";
-    $icon_menu_extra = "▫️";
-    $icon_phone = "☎️";
-    $icon_hash = "#️⃣";
-    $icon_address = "📌";
-    $icon_message = "📝";
-
-    $order_type = '';
-    $amount = $delivery_charge = 0;
-    if ($request->get('ordering-type') == 'on-table') {
-        /* on table */
-        $order->table_number = $request->get('table_number');
-
-        $customer_details .= $icon_hash.' '.$request->get('table_number');
-
-        $order_type = ___('On table');
-    } else {
-        if ($request->get('ordering-type') == 'takeaway') {
-            /* takeaway */
-            $order->phone_number = $request->get('phone-number');
-
-            $customer_details .= $icon_phone.' '.$request->get('phone-number');
-
-            $order_type = ___('Takeaway');
-        } else {
-            if ($request->get('ordering-type') == 'delivery') {
-                /* delivery */
-                $order->phone_number = $request->get('phone-number');
-                $order->address = $request->get('address');
-
-                $customer_details .= $icon_phone.' '.$request->get('phone-number')."\n";
-                $customer_details .= $icon_address.' '.$request->get('address');
-
-                $order_type = ___('Delivery');
-                $delivery_charge = post_options($restaurant->id, 'restaurant_delivery_charge', 0);
-            }
-        }
-    }
-
-    if (!empty($_POST['message'])) {
-        $customer_details .= "\n".$icon_message.' '.$request->get('message')."\n";
-    }
-
-    $order->message = $request->get('message');
-    $order->created_at = Carbon::now();
-
-    if ($request->get('pay_via') == 'pay_online') {
-        $order->status = 'unpaid';
-    }
-
-    $order->save();
-    $result['order']=$order;
-    $itemsr = $request->get('items');
-    $items = [];
-    
-    // Gelen veri dizi ise direkt atama yapın, değilse JSON decode ile işleyin.
-    if (is_array($itemsr)) {
-        $items = $itemsr;
-    } else {
-        $items = json_decode($itemsr, true); // true, decode işlemini array olarak döndürür.
-    }
-
-    $order_msg = $order_whatsapp_detail = '';
-
-    foreach ($items as $item_id => $item) {
-     // Dizi indeksleme yöntemiyle verilere ulaşın
-     $quantity = $item['quantity'];
-     
-     // Variants kısmı opsiyonel olabilir, kontrol edin
-     $variants = isset($item['variants']) ? $item['variants'] : null;
+         $order_msg = $order_whatsapp_detail = '';
  
-     // Menüyü bulma işlemi
-     $menu = Menu::find($item_id);
+         foreach ($items as $item_id => $item) {
+          // Dizi indeksleme yöntemiyle verilere ulaşın
+          $quantity = $item['quantity'];
+          
+          // Variants kısmı opsiyonel olabilir, kontrol edin
+          $variants = isset($item['variants']) ? $item['variants'] : null;
+      
+          // Menüyü bulma işlemi
+          $menu = Menu::find($item_id);
+      
+          if ($menu) {
+                 /* save order items */
+                 $order_item = OrderItem::create([
+                     'order_id' => $order->id,
+                     'item_id' => $item_id,
+                     'quantity' => $quantity,
+                     'variation' => is_numeric($variants) ? $variants : 0,
+                 ]);
  
-     if ($menu) {
-            /* save order items */
-            $order_item = OrderItem::create([
-                'order_id' => $order->id,
-                'item_id' => $item_id,
-                'quantity' => $quantity,
-                'variation' => is_numeric($variants) ? $variants : 0,
-            ]);
-
-            $variant_title = array();
-            if (is_numeric($variants)) {
-                $menu_variant = MenuVariant::query()
-                    ->where('menu_id', $item_id)
-                    ->find($variants);
-
-                if ($menu_variant) {
-                    $menu->price = $menu_variant->price;
-
-
-                    foreach ($menu_variant->options as $option_id => $option_key) {
-                        $menu_variant_option = MenuVariantOption::find($option_id);
-
-                        $options = $menu_variant_option->getOriginal('options');
-                        $variant_title[] = $options[$option_key];
-                    }
-                }
-            }
-            $variant_title = !empty($variant_title) ? ' ('.implode(', ', $variant_title).')' : '';
-
-            $amount += $menu->price * $quantity;
-
-            $order_msg .= $menu->getOriginal('name').$variant_title.($quantity > 1 ? ' &times; '.$quantity : '').'<br>';
-
-            $order_whatsapp_detail .= $icon_menu_item.$menu->getOriginal('name').$variant_title.' X '.$quantity."\n";
-
-            $extras = $item->extras??[];
-            foreach ($extras as $extra) {
-                $menu_extra = MenuExtra::find($extra->id);
-
-                if ($menu_extra) {
-                    // save order items extras
-                    OrderItemExtra::create([
-                        'order_item_id' => $order_item->id,
-                        'extra_id' => $extra->id,
-                    ]);
-
-                    $amount += $menu_extra->price * $quantity;
-
-                    $order_msg .= $menu_extra->getOriginal('title').'<br>';
-
-                    $order_whatsapp_detail .= "\t".$icon_menu_extra.$menu_extra->getOriginal('title')."\n";
-                }
-            }
-            $order_msg .= '<br>';
-        }
-    }
-    $amount += $delivery_charge;
-
-    /* Update currency */
-    config(['settings.currency_sign' => post_options($restaurant->id, 'currency_sign')]);
-    config(['settings.currency_pos' => post_options($restaurant->id, 'currency_pos')]);
-    config(['settings.currency_code' => post_options($restaurant->id, 'currency_code')]);
-
-    /* Send email to restaurant owner */
-    if (post_options($restaurant->id, 'restaurant_send_order_notification', 1)) {
-
-        $restaurant->user->sendMail(new RestaurantOrder([
-            'restaurant_name' => $restaurant->title,
-            'customer_name' => $request->get('name'),
-            'table_number' => $request->get('table_number'),
-            'phone_number' => $request->get('phone-number'),
-            'address' => $request->get('address'),
-            'order_type' => $order_type,
-            'order' => $order_msg,
-            'message' => $request->get('message'),
-        ]));
-    }
-
-    $result = ['success' => true, 'message' => '', 'whatsapp_url' => '', 'order'=>json_encode($order),"table_id"=>$request->get('table_number'),];
-
-    /* Whatsapp Ordering Plugin */
-    if(is_plugin_enabled('quickorder') && post_options($restaurant->id, 'quickorder_enable')){
-        $whatsapp_number = post_options($restaurant->id, 'whatsapp_number');
-        $whatsapp_message = post_options($restaurant->id, 'whatsapp_message');
-
-        if (empty($whatsapp_message))
-            $whatsapp_message = config('settings.quickorder_whatsapp_message');
-
-        $short_codes = [
-            '{ORDER_ID}' => $order->id,
-            '{ORDER_DETAILS}' => $order_whatsapp_detail,
-            '{CUSTOMER_DETAILS}' => $customer_details,
-            '{ORDER_TYPE}' => $order_type,
-            '{ORDER_TOTAL}' => price_code_format($amount)
-        ];
-
-        $whatsapp_message = str_replace(array_keys($short_codes), array_values($short_codes), $whatsapp_message);
-
-        $result['whatsapp_url'] = 'https://api.whatsapp.com/send?phone=' . $whatsapp_number . '&text=' . urlencode($whatsapp_message);
-    }
-
-    if ($request->get('pay_via') == 'pay_online') {
-
-        /* Create transaction to store all the details for further actions */
-        $transaction = Transaction::create([
-            'product_name' => $restaurant->title.' (#'.$order->id.')',
-            'product_id' => $order->id,
-            'user_id' => $restaurant->id,
-            'base_amount' => $amount,
-            'amount' => $amount,
-            'currency_code' => post_options($restaurant->id, 'currency_code'),
-            'transaction_method' => 'order',
-            'transaction_ip' => $request->ip(),
-            'transaction_description' => $restaurant->title.' (#'.$order->id.')',
-            'details' => [
-                'whatsapp_url' => $result['whatsapp_url'],
-                'customer_name' => $request->get('name'),
-                'phone' => $request->get('phone-number'),
-            ]
-        ]);
-
-        $result['message'] = route('payment.index', $transaction->id);
-        
-    }
-
-    return response()->json($result);
-}
+                 $variant_title = array();
+                 if (is_numeric($variants)) {
+                     $menu_variant = MenuVariant::query()
+                         ->where('menu_id', $item_id)
+                         ->find($variants);
+ 
+                     if ($menu_variant) {
+                         $menu->price = $menu_variant->price;
+ 
+ 
+                         foreach ($menu_variant->options as $option_id => $option_key) {
+                             $menu_variant_option = MenuVariantOption::find($option_id);
+ 
+                             $options = $menu_variant_option->getOriginal('options');
+                             $variant_title[] = $options[$option_key];
+                         }
+                     }
+                 }
+                 $variant_title = !empty($variant_title) ? ' ('.implode(', ', $variant_title).')' : '';
+ 
+                 $amount += $menu->price * $quantity;
+ 
+                 $order_msg .= $menu->getOriginal('name').$variant_title.($quantity > 1 ? ' &times; '.$quantity : '').'<br>';
+ 
+                 $order_whatsapp_detail .= $icon_menu_item.$menu->getOriginal('name').$variant_title.' X '.$quantity."\n";
+ 
+                 $extras = $item->extras;
+                 foreach ($extras as $extra) {
+                     $menu_extra = MenuExtra::find($extra->id);
+ 
+                     if ($menu_extra) {
+                         // save order items extras
+                         OrderItemExtra::create([
+                             'order_item_id' => $order_item->id,
+                             'extra_id' => $extra->id,
+                         ]);
+ 
+                         $amount += $menu_extra->price * $quantity;
+ 
+                         $order_msg .= $menu_extra->getOriginal('title').'<br>';
+ 
+                         $order_whatsapp_detail .= "\t".$icon_menu_extra.$menu_extra->getOriginal('title')."\n";
+                     }
+                 }
+                 $order_msg .= '<br>';
+             }
+         }
+         $amount += $delivery_charge;
+ 
+         /* Update currency */
+         config(['settings.currency_sign' => post_options($restaurant->id, 'currency_sign')]);
+         config(['settings.currency_pos' => post_options($restaurant->id, 'currency_pos')]);
+         config(['settings.currency_code' => post_options($restaurant->id, 'currency_code')]);
+ 
+         /* Send email to restaurant owner */
+         if (post_options($restaurant->id, 'restaurant_send_order_notification', 1)) {
+ 
+             $restaurant->user->sendMail(new RestaurantOrder([
+                 'restaurant_name' => $restaurant->title,
+                 'customer_name' => $request->get('name'),
+                 'table_number' => $request->get('table'),
+                 'phone_number' => $request->get('phone-number'),
+                 'address' => $request->get('address'),
+                 'order_type' => $order_type,
+                 'order' => $order_msg,
+                 'message' => $request->get('message'),
+             ]));
+         }
+ 
+         $result = ['success' => true, 'message' => '', 'whatsapp_url' => ''];
+ 
+         /* Whatsapp Ordering Plugin */
+         if(is_plugin_enabled('quickorder') && post_options($restaurant->id, 'quickorder_enable')){
+             $whatsapp_number = post_options($restaurant->id, 'whatsapp_number');
+             $whatsapp_message = post_options($restaurant->id, 'whatsapp_message');
+ 
+             if (empty($whatsapp_message))
+                 $whatsapp_message = config('settings.quickorder_whatsapp_message');
+ 
+             $short_codes = [
+                 '{ORDER_ID}' => $order->id,
+                 '{ORDER_DETAILS}' => $order_whatsapp_detail,
+                 '{CUSTOMER_DETAILS}' => $customer_details,
+                 '{ORDER_TYPE}' => $order_type,
+                 '{ORDER_TOTAL}' => price_code_format($amount)
+             ];
+ 
+             $whatsapp_message = str_replace(array_keys($short_codes), array_values($short_codes), $whatsapp_message);
+ 
+             $result['whatsapp_url'] = 'https://api.whatsapp.com/send?phone=' . $whatsapp_number . '&text=' . urlencode($whatsapp_message);
+         }
+ 
+         if ($request->get('pay_via') == 'pay_online') {
+ 
+             /* Create transaction to store all the details for further actions */
+             $transaction = Transaction::create([
+                 'product_name' => $restaurant->title.' (#'.$order->id.')',
+                 'product_id' => $order->id,
+                 'user_id' => $restaurant->id,
+                 'base_amount' => $amount,
+                 'amount' => $amount,
+                 'currency_code' => post_options($restaurant->id, 'currency_code'),
+                 'transaction_method' => 'order',
+                 'transaction_ip' => $request->ip(),
+                 'transaction_description' => $restaurant->title.' (#'.$order->id.')',
+                 'details' => [
+                     'whatsapp_url' => $result['whatsapp_url'],
+                     'customer_name' => $request->get('name'),
+                     'phone' => $request->get('phone-number'),
+                 ]
+             ]);
+ 
+             $result['message'] = route('payment.index', $transaction->id);
+         }
+ 
+         return response()->json($result);
+     }
 
 }

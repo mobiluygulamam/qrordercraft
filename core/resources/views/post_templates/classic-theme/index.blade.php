@@ -5,6 +5,7 @@
 @push('style_at_top')
     <link rel="stylesheet" href="{{ asset('assets/templates/classic/css/style.css?ver='.config('appinfo.version')) }}">
     <link rel="stylesheet" href="{{ asset('assets/templates/classic/css/color.css?ver='.config('appinfo.version')) }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js" integrity="sha512-Ixzuzfxv1EqafeQlTCufWfaC6ful6WFqIz4G+dWvK0beHw0NVJwvCKSgafpy5gwNqKmgUfIBraVwkKI+Cz0SEQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
@@ -26,7 +27,7 @@
          data-background-image="{{ asset('storage/restaurant/cover/'.$post->cover_image) }}">
         <div class="container">
      
-          @if (!$hasqr_id)
+          @if ($getUserBusinessTable==null)
           <div class="tw-bg-slate-100 tw-h-15 tw-w-auto"><span>Sipariş vermek için lütfen  masa qr kodunu okutun.</span> </div>
           @endif
             <div class="row">
@@ -191,6 +192,10 @@
         <button id="view-order-button" class="button ripple-effect">{{ ___('View Order') }}</button>
     </div>
 
+
+
+
+ </div>
     <!-- Your Order -->
     <div id="your-order" class="zoom-anim-dialog mfp-hide dialog-with-tabs popup-dialog">
         <!--Tabs -->
@@ -275,10 +280,7 @@
                                 <span role="button" class="qr-input-number__increase ripple-effect ripple-effect-dark"
                                       id="menu-order-quantity-increase">+</span>
                             </div>
-                            @if($hasqr_id)
-                            <button id="add-order-button" class="button ripple-effect">{{___('Add')}} <span
-                                    id="order-price"></span></button>
-                                    @endif
+                          
                         </div>
                     </div>
                 </div>
@@ -300,6 +302,11 @@
                     <form method="post" id="feedback-form">
     @csrf
     <div class="form-group tw-mb-4">
+        <label for="comment" class="tw-font-medium"></label>
+        <input id="comment" name="comment" class="tw-p-2 form-control tw-w-full tw-mt-1 tw-p-2 tw-border tw-rounded" rows="1" placeholder="{{___('order_code')}}" required></input>
+    </div>
+
+    <div class="form-group tw-mb-4">
         <label for="rating" class="tw-font-medium">Puanınız:</label>
         <select id="rating" name="rating" class="form-control tw-w-full tw-mt-1 tw-p-2 tw-border tw-rounded" required>
             <option value="5">5 - Çok İyi</option>
@@ -310,10 +317,13 @@
         </select>
     </div>
 
+<div class="tw-mb-2"></div>
+
     <div class="form-group tw-mb-4">
-        <label for="comment" class="tw-font-medium">Yorumunuz:</label>
-        <textarea id="comment" name="comment" class="form-control tw-w-full tw-mt-1 tw-p-2 tw-border tw-rounded" rows="4" placeholder="Yorumunuzu buraya yazın..." required></textarea>
+        <label for="comment" class="tw-font-medium">{{___("your_comment")}}</label>
+        <textarea id="comment" name="comment" class="tw-p-2 form-control tw-w-full tw-mt-1 tw-p-2 tw-border tw-rounded" rows="4" placeholder="Yorumunuzu buraya yazın..." required></textarea>
     </div>
+   
 
     <button type="submit" id="savefeedback" class="margin-top-0 button button-sliding-icon ripple-effect">
         Kaydet <i class="icon-material-outline-arrow-right-alt"></i>
@@ -345,6 +355,7 @@
 
 @push('scripts_at_bottom')
     <script>
+
         $('.user-lang-switcher').on('click', '.dropdown-menu li', function (e) {
             e.preventDefault();
             var code = $(this).data('code');
@@ -408,7 +419,9 @@
             success: function (response) {
               
                 $.magnificPopup.close();
-               }});});
+               }});
+          
+          });
 
     </script>
 @endpush

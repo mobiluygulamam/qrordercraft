@@ -8,6 +8,8 @@
 <body class="{{ current_language()->direction }}">
 @include($activeTheme.'layouts.includes.header')
 
+
+
 @yield('content')
 
 @include($activeTheme.'layouts.includes.footer')

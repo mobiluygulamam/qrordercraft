@@ -98,6 +98,7 @@ return array (
   'add_new' => 'Yeni Ekle',
   'categories' => 'Kategoriler',
   'comments' => 'Yorumlar',
+  'your_comment'=>"Yorumunuz:",
   'pages' => 'Sayfalar',
   'faqs' => 'SSS',
   'advertisements' => 'Reklamlar',
@@ -537,6 +538,7 @@ return array (
   'sendmail' => 'SENDMAIL',
   'log' => 'Günlük',
   'host' => 'Sunucu',
+  'clock' => 'Saat',
   'port' => 'Port',
   'encryption' => 'Şifreleme',
   'tls' => 'TLS',
@@ -831,5 +833,9 @@ return array (
   'header_sub_message' => 'Müşterilerinize özel hızlı ve unutulmaz bir menü deneyimi sunun.',
   'get_started' => 'Başlayalım',
   'create_an_menu_in_1min' => '50 saniye içinde menü oluşturun, satışlarınızı katlayın',
-
+  'customer_address' => 'Müşteri adresi',
+  'ready_table'=>"Masa Hazır",
+  'waiting_table'=>"Masa Bekliyor",
+  'full_table'=>"Masa Dolu",
+  'order_code'=>"Sipariş kodunuz"
 );

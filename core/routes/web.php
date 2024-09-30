@@ -195,7 +195,12 @@ Route::post('/save-image', [UnSplashController::class, 'saveImage'])->name('unsp
 
     /* RESTAURANT PUBLIC ROUTES */
     Route::post('{restaurant}/call-waiter', 'User\PostController@callTheWaiter')->name('restaurant.callTheWaiter');
+//     Route::post('{restaurant}/send-order', 'User\PostController@sendOrder')->name('restaurant.sendOrder');
     Route::post('{restaurant}/send-order', 'User\PostController@sendOrder')->name('restaurant.sendOrder');
+    Route::post('{restaurant}/send-orderTable', 'User\PostController@sendOrderTable')->name('restaurant.sendOrderTable');
+    Route::post('{restaurant}/sendOrderTest', 'User\PostController@sendOrderTest')->name('restaurant.sendOrderTest');
+   
+    
     Route::get('payment/{transaction}', 'User\PaymentController@index')->name('payment.index');
     Route::post('payment/{transaction}/pay', 'User\PaymentController@pay')->name('payment.pay');
 
@@ -312,7 +317,10 @@ Route::get('{slug}', 'User\PostController@publicView')->name('publicView');
 
 
 
-
+Route::middleware('throttle:100,5')->group(function () {
+     Route::get('/', 'HomeController@index')->name('home');
+ });
+ 
 
 
 Route::get('/pusherconfig', function () {

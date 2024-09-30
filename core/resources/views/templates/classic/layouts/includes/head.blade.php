@@ -36,3 +36,17 @@
 <meta name="theme" content="{{ active_theme_name() }}">
 <title>{!! page_title($__env) !!}</title>
 <link rel="shortcut icon" type="image/x-icon" href="{{ asset('storage/logo/'.$settings->site_favicon) }}">
+<style>
+     .joinusertoast {
+         background-color: #28a745; /* Yeşil arka plan */
+         color: #28a745; /* Yeşil metin */
+         padding: 15px;
+         border-radius: 5px;
+         position: fixed;
+         top: 20px;
+         right: 20px;
+         z-index: 1000;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+     }
+ </style>
+ 

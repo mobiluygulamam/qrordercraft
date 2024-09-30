@@ -830,5 +830,7 @@ return array (
   'header_sub_message' => 'Offer your customers a fast and unforgettable customized menu experience',
   'get_started' => 'Get Started',
   'create_an_menu_in_1min' => '50 saniye içinde menü oluşturun, satışlarınızı katlayın',
-  
+  'customer_address' => 'customer_address',
+  'your_comment'=>"Yorumunuz:",
+
 );

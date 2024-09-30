@@ -1,6 +1,6 @@
 @if(count($menus))
     @foreach($menus as $menu)
-        <div class="tw-grid tw-grid-cols-3 sm:tw-grid-cols-8 lg:tw-grid-cols-8 " data-reorder-route="{{route('restaurants.reorderMenuItem', $post->id)}}">
+        <div class=" tw-grid tw-grid-cols-3 sm:tw-grid-cols-8 lg:tw-grid-cols-8 " data-reorder-route="{{route('restaurants.reorderMenuItem', $post->id)}}">
 
         @php
         $mImg = "";
@@ -10,10 +10,11 @@
             $mImg = asset('storage/menu/' . $menu->image);
         }
         @endphp
+       
         <div data-product-id="{{$menu->id}}" class="tw-w-44 tw-bg-white tw-shadow-md tw-rounded-xl tw-duration-500 hover:tw-scale-105 hover:tw-shadow-xl product-item">
                 <img src="{{!isset($mImg) ? asset('storage/menu/default.png') : $mImg}}"
                     alt="Product" class="tw-h-36 tw-w-44 tw-object-cover tw-rounded-t-xl" />
-                <div class="tw-px-4 tw-py-3">
+                <div class="tw-px-4">
                     <p class="tw-text-lg tw-font-bold tw-text-black tw-truncate tw-block tw-capitalize">{{$menu->name}}</p>
                     <div class="tw-flex tw-items-center">
                         <!-- Ürün Fiyatı -->
@@ -38,9 +39,12 @@
 
                      </div>
                 </div>
+          
         </div> 
      
+       
      </div>
+     <div class="tw-w-12"></div>
     @endforeach
 @endif
 

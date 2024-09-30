@@ -93,6 +93,7 @@
                  title="{{___('View Order')}}" data-id="{{$order->id}}"><i
                  class="icon-feather-eye"></i>
          </button>
+         
          <div class="order-print-tpl-{{$order->id}} d-none">
              <table>
                  <tr>

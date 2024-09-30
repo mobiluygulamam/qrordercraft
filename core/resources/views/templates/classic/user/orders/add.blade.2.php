@@ -5,13 +5,13 @@
 <div class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-3 tw-gap-4"> <!-- Ana kolon -->
     
      <!-- Birinci içerik (2 col büyük ekranlarda, mobilde tam genişlik) -->
-     <div class="lg:tw-col-span-2 ">
+     <div class="lg:tw-col-span-2">
          @foreach ($post->menu_categories as $category)
              <!-- Kategori Adı -->
-             <h2 class=" tw-text-2xl tw-font-bold tw-my-8 tw-text-center lg:tw-text-left">{{$category->name}}</h2>
+             <h2 class="tw-text-2xl tw-font-bold tw-mb-4 tw-text-center lg:tw-text-left">{{$category->name}}</h2>
  
              <!-- Ürünleri grid içinde soldan sağa sıralamak -->
-             <section class="tw-grid tw-grid-cols-4 sm:tw-grid-cols-2 md:tw-grid-cols-4 lg:tw-grid-cols-3 xl:tw-grid-cols-4 tw-gap-5">
+             <section class="tw-grid tw-grid-cols-2 sm:tw-grid-cols-2 md:tw-grid-cols-3 lg:tw-grid-cols-4 xl:tw-grid-cols-5 tw-gap-4">
                  <!-- Her kategoriye ait ürünlerin gösterimi -->
                  @include($activeTheme.'user.orders.item', ['menus' => $category->menus])
              </section>
@@ -19,7 +19,6 @@
  
          <!-- Sipariş Ver Butonu -->
      </div>
-  
  
      <!-- İkinci içerik (1 col büyük ekranlarda, mobilde tam genişlik) -->
      <div>
@@ -119,9 +118,9 @@ formData.push({name: '_token', value: '{{ csrf_token() }}'});  // CSRF token ekl
                 success: function(response) {
                   
                     console.log('Sipariş başarıyla gönderildi', response);
-                  
+                    localStorage.removeItem('orderItems'); // Sipariş sonrası LocalStorage'ı temizle
          
-                    printOrder(JSON.parse(response.order), response.created_at, response.orderItems).then(() => {
+                    printOrder(JSON.parse(response.order)).then(() => {
                          // alert(JSON.stringify(response));
                          $.magnificPopup.open({
                 items: {
@@ -138,7 +137,7 @@ formData.push({name: '_token', value: '{{ csrf_token() }}'});  // CSRF token ekl
                 }
             });  
                     }).catch((err) => {
-                         console.error('Hata oluştu: ', err);
+                         console.error('Hata oluştu: ', error);
                     });
 
               
@@ -171,7 +170,7 @@ formData.push({name: '_token', value: '{{ csrf_token() }}'});  // CSRF token ekl
             let productId = menuItem.attr('data-product-id'); // Ürünün ID'sini al
             let quantityInput = menuItem.find('.menu_quantity');
             quantityInput.val(parseInt(quantityInput.val()) + 1);  // Miktarı arttır
-            updatePrice(menuItem,true); // Fiyatı güncelle
+            updatePrice(menuItem); // Fiyatı güncelle
         });
 
         $('.qr-input-number__decrease').on('click', function () {
@@ -180,12 +179,12 @@ formData.push({name: '_token', value: '{{ csrf_token() }}'});  // CSRF token ekl
             let quantityInput = menuItem.find('.menu_quantity');
             if (parseInt(quantityInput.val()) > 0) {  // Miktar 0'ın altına düşmesin
                 quantityInput.val(parseInt(quantityInput.val()) - 1);  // Miktarı azalt
-                updatePrice(menuItem, false); // Fiyatı güncelle
+                updatePrice(menuItem); // Fiyatı güncelle
             }
         });
 
         // Fiyatı güncelleme ve LocalStorage'a kaydetme fonksiyonu
-        function updatePrice(menuItem, status) {
+        function updatePrice(menuItem) {
             let itemId = menuItem.attr('data-product-id'); // Ürünün data-id'sini al
             let price = parseFloat(menuItem.find('.item_price').data('price')); // Ürün fiyatını al
             let quantity = parseInt(menuItem.find('.menu_quantity').val()); // Ürün miktarını al
@@ -210,13 +209,10 @@ formData.push({name: '_token', value: '{{ csrf_token() }}'});  // CSRF token ekl
             // Güncellenmiş veriyi LocalStorage'a kaydet
             localStorage.setItem('orderItems', JSON.stringify(orderItems));
      
-      if(status)
+      
             allTotal+=totalPrice;
-else 
-allTotal-=totalPrice;
-       document.getElementById('your-order-price').innerText = allTotal + " ₺" ;
 
-       localStorage.setItem("allTotal", allTotal);
+       document.getElementById('your-order-price').innerText = allTotal + " ₺" ;
         }
 
         // Sipariş ekleme butonu (ürün başına)
@@ -233,7 +229,7 @@ allTotal-=totalPrice;
             }
         });
     });
-    function printOrder(order,created_at, orderItems){
+    function printOrder(order){
      return new Promise((resolve, reject) => {
           
           try {
@@ -244,8 +240,8 @@ let orderHTML = `
     <div class="order-print-tpl-${order.id}">
         <table>
             <tr>
-                <td>{{___('clock')}}</td>
-                <td>${created_at}</td>
+                <td>{{___('time')}}</td>
+                <td>${order.created_at}</td>π
             </tr>
             <tr>
                 <td>{{___('customer_name')}}</td>
@@ -256,7 +252,7 @@ let orderHTML = `
 if (order.type === 'on-table') {
     orderHTML += `
                 <td>{{___('table')}}</td>
-                <td>${order.table_number}</td>`;
+                <td>${JSON.parse(order)}</td>`;
 } else if (order.type === 'takeaway') {
     orderHTML += `
                 <td>{{___('type')}}</td>
@@ -308,17 +304,14 @@ orderHTML += `
         <table class='order-print-menu'>
             <thead>
                 <tr>
-                    <th>{{___('menu')}}</th>
-                    <th>{{___('price')}}</th>
+                    <th>Menu</th>
+                    <th>Price</th>
                 </tr>
             </thead>
             <tbody id='order-print-menu'>`;
 
-if (orderItems) {
-     var allTotal2 =localStorage.getItem('allTotal');
-
-     orderItems.forEach(function(item) {
-   
+if (order.items) {
+    order.items.forEach(function(item) {
         orderHTML += `
             <tr>
                 <td>${item.menu.name}`;
@@ -328,7 +321,7 @@ if (orderItems) {
         }
 
         orderHTML += ` × ${item.quantity}</td>
-                <td>${item.menu.price * item.quantity} ₺ </td>
+                <td>${item.menu.price * item.quantity}</td>
             </tr>`;
 
         if (item.itemExtras) {
@@ -336,33 +329,35 @@ if (orderItems) {
                 orderHTML += `
                 <tr class="order-menu-extra">
                     <td><span class="margin-left-5">${itemExtra.extra.title}</span></td>
-                    <td>${itemExtra.extra.price * item.quantity} ₺ </td>
+                    <td>${itemExtra.extra.price * item.quantity}</td>
                 </tr>`;
             });
         } else {
-         
+            orderHTML += `
+            <tr>
+                <td colspan="2">No Extra</td>
+            </tr>`;
         }
     });
 }
 
-
+if (order.type === 'delivery' && postOptions.restaurant_delivery_charge) {
+    orderHTML += `
+            <tr>
+                <td>Delivery Charge</td>
+                <td>${postOptions.restaurant_delivery_charge}</td>
+            </tr>`;
+}
 
 orderHTML += `
             </tbody>
             <tfoot>
                 <tr>
-                    <th>{{___('total')}}</th>
-                    <td>${allTotal2} ₺</td>
+                    <th>Total</th>
+                    <td>${order.price}</td>
                 </tr>
             </tfoot>
         </table>
-         <div class="order-code-container">
-        <hr>
-        <div class="order-code-content">
-            <p class="order-code-title">Sipariş Kodu:</p>
-            <p class="order-code-value">${order.unique_code}</p>
-        </div>
-    </div>
     </div>`;
 
 // Yeni HTML içeriğini sayfaya ekle
