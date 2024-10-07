@@ -1,6 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Facade;
+// allow_url_fopen sadece php.ini dosyasından ayarlanabilir
+
+// Bellek limitini ayarla
+ini_set('memory_limit', '1024M');
+
+// Maksimum çalışma süresini ayarla (600 saniye)
+ini_set('max_execution_time', '18000');
+
+// Maksimum giriş süresini ayarla (600 saniye)
+ini_set('max_input_time', '600');
+
+// POST isteği maksimum boyutu (php.ini üzerinden değiştirilmeli)
+ini_set('post_max_size', '1G'); // Genellikle php.ini'de yapılması önerilir
+
+// Yükleme dosya boyutunu ayarla (php.ini üzerinden değiştirilmeli)
+ini_set('upload_max_filesize', '1G'); // php.ini'de değiştirilmesi gerekiyor
+
 
 return [
 
@@ -217,3 +234,4 @@ return [
     ])->toArray(),
 
 ];
+

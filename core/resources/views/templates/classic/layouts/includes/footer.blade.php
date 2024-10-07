@@ -146,7 +146,7 @@
             <div class="row">
                 <div class="col-xl-12">
                     {{-- <span
-                        class="footer-copyright-text">{{ ___('Copyright © :current_year Bylancer. All Rights Reserved.', ['current_year' => date('Y')]) }}</span> --}}
+                        class="footer-copyright-text">{{ ___('Copyright © :current_year CraftOrder All Rights Reserved.', ['current_year' => date('Y')]) }}</span> --}}
                 </div>
             </div>
         </div>

@@ -27,21 +27,32 @@ class PlanChecker extends Command
      */
     public function handle()
     {
-   //Userları çek
-     $users=User::all();
-     //created_at yani oluşturulma zamanlarını gez foreach ile
-     foreach ($users as $user) {
-          // Şu anki zaman ile oluşturulma zamanını karşılaştır
-          // Eğer oluşturulma tarihinden 7 gün geçmişse
-          if($user->groud_id=="free")
-        {  if (Carbon::now()->diffInDays($user->created_at) > 7) {
-              // group_id'yi güncelle
-              $user->group_id = ""; // Örneğin, group_id'yi 2 yapalım
-              $user->save(); // Değişikliği kaydet
-              info(" {$user->id } user deneme sürümü bitti.");
-          }}
+        // Tüm kullanıcıları al
+        $users = User::all();
 
-      }
+        foreach ($users as $user) {
+            // Kullanıcı 'free' grupta mı?
+            if ($user->group_id == 'free') {
+                // Kullanıcının oluşturulma tarihi ile şu anki tarih arasındaki gün farkını hesapla
+                $daysSinceCreated = Carbon::now()->diffInDays($user->created_at);
 
+                // Eğer 7 günden fazlaysa
+                if ($daysSinceCreated > 7) {
+                    // Kullanıcının group_id'sini güncelle (örneğin, boş yapıyoruz)
+                    $user->group_id = '';
+                    $user->save();
+
+                    // Log kaydı
+                    $this->info("{$user->id} numaralı kullanıcının deneme süresi bitti.");
+                }
+            }
+            else if($user->group_id!=''){
+               
+            }
+        }
+
+        // İşlem bittiğinde bilgi mesajı
+        $this->info('Tüm kullanıcılar kontrol edildi.');
     }
+
 }

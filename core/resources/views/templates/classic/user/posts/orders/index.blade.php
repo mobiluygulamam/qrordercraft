@@ -1,3 +1,29 @@
+@if(!$isUserSubscriber)
+@extends($activeTheme.'layouts.app')
+@section('title', ___('All Restaurants'))
+@section('content')
+
+ <div class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-3 tw-mb-2 tw-flex tw-flex-col tw-items-start">
+     <div class="tw-flex tw-justify-between tw-w-full">
+       <div class="tw-text-lg tw-font-semibold tw-text-zinc-900"></div>
+       
+     
+     </div>
+     <div class="tw-mt-2 tw-text-sm tw-text-zinc-600">
+      
+       <span>{{___('purchase_plan')}}</span>
+     </div>
+     <div class="tw-mt-2 tw-text-sm tw-text-zinc-700">
+    
+       
+     </div>
+   </div>
+    </div>
+    @endsection
+@push('scripts_at_bottom')
+
+@endpush
+@else 
 @extends($activeTheme.'layouts.app')
 @section('title', ___('Orders').' - '.$post->title)
 @if(!empty($menu_languages))
@@ -129,3 +155,4 @@
 <script src="{{ asset($activeThemeAssets.'js/orders.js?var='.config('appinfo.version')) }}"></script>
 
     @endpush
+@endif

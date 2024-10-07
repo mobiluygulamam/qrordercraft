@@ -205,7 +205,7 @@ class SettingsController extends Controller
                 set_env('MAIL_PORT', $requestData['smtp_port']);
                 set_env('MAIL_USERNAME', $requestData['smtp_username']);
                 set_env('MAIL_PASSWORD', $requestData['smtp_password']);
-                set_env('MAIL_ENCRYPTION', $requestData['smtp_secure']);
+                set_env('MAIL_ENCRYPTION', false);
                 set_env('MAIL_FROM_ADDRESS', $requestData['smtp_from_email']);
                 set_env('MAIL_FROM_NAME', $requestData['smtp_from_name'], true);
 

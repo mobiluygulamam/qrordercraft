@@ -26,7 +26,7 @@
                 <h2 class="margin-bottom-30">{{ ___('Tell us what you think of us') }}</h2>
                 <span>{{ ___('We would like to hear your opinions about the website. We would be grateful if you could take the time to fill out this form') }}</span>
                 <div class="feed-back-form margin-top-20">
-                    <form method="post" action="{{ route('feedback') }}">
+                    <form method="post" action="{{ route('feedbackSend') }}">
                         @csrf
                         <div class="submit-field">
                             <h5>{{ ___('Your Name') }} *</h5>

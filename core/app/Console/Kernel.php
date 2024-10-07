@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         'App\Console\Commands\QuickCronHourly',
         'App\Console\Commands\QuickCronDaily',
         'App\Console\Commands\PlanChecker',
+        'App\Console\Commands\TestCronCommand',
     ];
 
     /**
@@ -30,6 +31,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('cron:quick-cron-hourly')->hourly();
         $schedule->command('cron:quick-cron-daily')->daily();
         $schedule->command('cron:plan-checker')->daily();
+        
+        $schedule->command('cron:test')->everyMinute();
+     
+
     }
 
     /**

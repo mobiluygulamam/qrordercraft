@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Mails\UserDetails;
 use App\Models\User;
+use App\Models\Subscriber;
 use App\Providers\RouteServiceProvider;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
@@ -54,6 +56,19 @@ class RegisterController extends Controller
     {
         return view($this->activeTheme . 'auth.register');
     }
+ 
+    public function invite($inviteUrl)
+    {
+        // Token ile aboneyi bul
+        $subscriber = Subscriber::where('token', $inviteUrl)->first();
+
+        if (!$subscriber) {
+            return redirect('/')->with('error', 'Geçersiz davet bağlantısı!');
+        }
+
+        // Kayıt sayfasına yönlendir veya burada başka işlemler yap
+        return view('auth.register', compact('subscriber'));
+    }
 
     /**
      * Before register a new user
@@ -68,9 +83,12 @@ class RegisterController extends Controller
                 'email' => ['required', 'string', 'email', 'max:100', 'unique:user'],
                 'password' => ['required', 'string', 'min:6', 'max:20'],
                 'agree_for_term' => ['sometimes', 'required'],
+                'inviteUrl' => ['sometimes', 'required'],
             ] + validate_recaptcha())
             ->validate();
+          
 
+            
         $ipInfo = user_ip_info();
 
         $data = array_merge($request->all(), [
@@ -87,7 +105,22 @@ class RegisterController extends Controller
             'group_id' => config('settings.default_user_plan'),
             'country' => $data['country_name'],
             'country_code' => $data['country_code'],
+            'plan_start_date'=>Carbon::now(),
+            'plan_end_date'=>Carbon::now()->addDays(7),
+            'payment_status'=>"Register",
         ]);
+        if ($request->inviteUrl) {
+          $subscriber = Subscriber::where('token', $request->inviteUrl)->first();
+          if ($subscriber) {
+              $user->plan_end_date = Carbon::now()->addDays(30); // 1 ay ücretsiz deneme
+              $user->save();
+              
+              // Abone kaydını güncelle
+              $subscriber->update([
+                  'trial_ends_at' => Carbon::now()->addDays(30) // Abone için deneme süresini başlat
+              ]);
+          }
+      }
         if ($user) {
             /* Send user details email */
             $user->sendMail(new UserDetails($user));

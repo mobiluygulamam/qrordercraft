@@ -18,7 +18,7 @@
          corePlugins: {
              preflight: false,
          }
-     };
+     };</script>
 </head>
 <body>
 <!-- Layout wrapper -->

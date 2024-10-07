@@ -13,33 +13,33 @@
                         <th>{{ ___('Membership') }}</th>
                         <th>{{ ___('Start Date') }}</th>
                         <th>{{ ___('Expiry Date') }}</th>
-                        @if($pay_mode != "one_time")<th></th>@endif
+                        <th>{{ ___('days_left') }}</th>
+                       <th></th>
                     </tr>
                     <tr>
                         <td>{{ !empty($plan->translations->{get_lang()}->name)
                                         ? $plan->translations->{get_lang()}->name
                                         : $plan->name }}
-                            {{-- @if($interval)
-                                <small>({{plan_interval_text($interval)}})</small>
-                            @endif --}}
+                          
                         
                          </td>
                         <td>{{$start_date}}</td>
                         <td>{{$expiry_date}}</td>
-                        @if($pay_mode != "one_time")
+                      <td>{{$planlastdate}}</td>
                         <td>
-                            <form action="{{ route('subscription.cancel') }}" method="post">
+                            {{-- <form action="{{ route('subscription.cancel') }}" method="post">
                                 @csrf
-                                <button class="button" type="submit"><i class="fa fa-remove"></i> {{ ___('Cancel Recurring') }}</button>
-                            </form>
+                                <button class="button" type="submit"><i class="fa fa-remove"></i> {{ ___('Cancel') }}</button>
+                            </form> --}}
                         </td>
-                        @endif
+                   
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         <td colspan="7"><a href="{{ route('pricing') }}" class="button">{{ ___('Change Plan') }}</a></td>
-                    </tr>
+                    </tr> --}}
                 </table>
             </div>
         </div>
     </div>
 @endsection
+'plan', 'start_date', 'expiry_date',  'planlastdate'

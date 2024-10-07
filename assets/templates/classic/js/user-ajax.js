@@ -34,8 +34,12 @@ jQuery(function ($) {
     $('#newsletter-form').on('submit', function (e) {
         e.preventDefault();
         e.stopPropagation();
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
         var data = new FormData(this),
             $form = $(this);
+   
+    data.append('_token', csrfToken);
+
 
         var $btn = $(this).find('.button'),
             $error = $(this).find('.invalid-tooltip');

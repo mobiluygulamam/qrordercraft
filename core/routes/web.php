@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\StaffController;
@@ -7,7 +8,7 @@ use App\Http\Controllers\UnSplashController;
 use App\Http\Controllers\User\OrderController; 
 use App\Http\Controllers\User\StaffFeedBackController;
 use App\Http\Controllers\FeedBackController; 
-
+use  App\Http\Controllers\Admin\SubscriberController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,6 +29,15 @@ Route::get('/clear-cache', function () {
 
 
 
+Route::get('/test-invite-mail', function () {
+     // Test için inviteUrl değerini manuel olarak atayabilirsiniz
+     $inviteUrl = 'https://example.com/invite/test-token';
+ 
+     return view('emails.subscriber_invite', [
+         'inviteUrl' => $inviteUrl
+     ]);
+ });
+ 
 /* Routs With Laravel Localization */
 if (!config('settings.include_language_code')) {
     $middlewares = [
@@ -51,20 +61,28 @@ Route::group($middlewares, function () {
         Route::get('faq', 'faqs')->name('faqs');
         Route::get('testimonials', 'testimonials')->name('testimonials');
         Route::get('contact', 'contact')->name('contact');
-        Route::get('privacyPolicy', 'privacyPolicy')->name('privacyPolicy');
-        Route::get('cookiePolicy', 'cookiePolicy')->name('cookiePolicy');
+     
 Route::get('blank','blankpage')->name('blankpage');
 Route::get('/landingpage', 'landingpage')->name('landingpage.index');
+Route::get('privacyPolicy', 'privacyPolicy')->name('privacyPolicy');
+Route::get('cookiePolicy', 'cookiePolicy')->name('cookiePolicy');
+Route::get('terms-and-conditions', 'termsandconditions')->name('termsandconditions');
+Route::get('about-us', 'aboutUs')->name('aboutUs');
+Route::get('contact-information', 'contactInformation')->name('contactInformation');
 
 
 Route::get('test','testpage')->name('unsplash.search');
 Route::get('load-images', [UnSplashController::class, 'loadImages'])->name('unsplash.loadImages');
 Route::post('/save-image', [UnSplashController::class, 'saveImage'])->name('unsplash.saveImage');
+Route::get('/invite/{token}',  'inviteRoute')->name('subscriber.invite');
 
         
-        Route::post('contact', 'contactSend')->name('contact');
+        Route::post('contact', 'contactSend')->name('contactSend');
         Route::get('feedback', 'feedback')->name('feedback');
-        Route::post('feedback', 'feedbackSend')->name('feedback');
+        Route::get('integrations', 'integrationspage')->name('integrations');
+
+        
+        Route::post('feedback', 'feedbackSend')->name('feedbackSend');
         Route::get('pricing', 'pricing')->name('pricing');
         Route::get('page/{slug}', 'page')->name('page');
         Route::post('newsletter', 'newsletter')->name('newsletter');
@@ -82,7 +100,7 @@ Route::post('/save-image', [UnSplashController::class, 'saveImage'])->name('unsp
         Route::get('blog/{id}/{slug?}', 'single')->name('blog.single');
         Route::post('blog/{id}/{slug?}', 'comment')->name('blog.comment');
     });
- 
+
 
 
     /* FRONTEND LOGIN REQUIRED */

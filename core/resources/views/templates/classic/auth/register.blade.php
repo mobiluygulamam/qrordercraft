@@ -21,6 +21,9 @@
 
     <form method="post" id="register-account-form" action="#" accept-charset="UTF-8">
         @csrf
+        @if(isset($subscriber))
+        <input type="hidden" name="inviteUrl" value="{{ $subscriber->token }}">
+    @endif
         <div class="form-group">
             <div class="input-with-icon-left">
                 <i class="la la-user"></i>

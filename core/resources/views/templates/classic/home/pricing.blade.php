@@ -1,6 +1,5 @@
-@extends($activeTheme.'layouts.main')
-@section('title', ___('Pricing'))
-@section('content')
+
+
     <div id="titlebar" class="gradient">
         <div class="container">
             <div class="row">
@@ -65,5 +64,3 @@
     </div>
     <div class="margin-top-80"></div>
 
-    <!--- {!! ads_on_bottom() !!} -->
-@endsection

@@ -10,7 +10,19 @@ jQuery(function ($) {
     } else {
         $notification_sound.html('<i class="icon-feather-volume-x"></i>');
     }
-
+    $(document).on('click', '.order-print-button', function (e) {
+     var mywindow = window.open('', 'qr_print', 'height=400,width=600');
+     mywindow.document.write('<html><head><title>Print</title> <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge">');
+     mywindow.document.write('<link rel="stylesheet" href="' + assetsUrl + '/templates/' + template_name + '/css/style.css" type="text/css" />');
+     mywindow.document.write('</head><body><div class="order-print">');
+     mywindow.document.write($('.order-print').html());
+     mywindow.document.write('</div></body></html>');
+     localStorage.removeItem('orderItems');
+     mywindow.print();
+     //mywindow.close();
+     mywindow.document.close();
+  
+ });
     /* complete order */
     $(document).on('click', '.qr-complete-order', function (e) {
         e.preventDefault();

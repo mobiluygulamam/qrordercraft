@@ -153,21 +153,9 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">{{___('Trial Done')}}</label>
-                            <select class="form-control" name="package_trial_done">
-                                <option value="1"
-                                        @if(user_options($user->id, 'package_trial_done')) selected @endif>{{___('Yes')}}</option>
-                                <option value="0"
-                                        @if(!user_options($user->id, 'package_trial_done')) selected @endif>{{___('No')}}</option>
-                            </select>
-                        </div>
+                       
 
-                        <div class="mb-3 plan_expiration_date">
-                            <label class="form-label" for="id_exdate">{{___('Expiration Date')}}</label>
-                            <input id="id_exdate" type="date" class="form-control" name="plan_expiration_date"
-                                   value="{{ $user->upgrade ? date_formating($user->upgrade->upgrade_expires, 'Y-m-d') : date('Y-m-d') }}">
-                        </div>
+                      
                     </form>
                 </div>
             </div>

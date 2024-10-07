@@ -667,12 +667,18 @@ function text_shorting($text, $chars_limit)
     return Str::limit($text, $chars_limit);
 }
 
+function isUserSubscriber(){
+  return    request()->user()->group_id!=null||request()->user()->group_id=='';
+}
+
 /**
  * Convert a number into a readable one
  *
  * @param $number
  * @return string
  */
+
+
 function format_number_count($number)
 {
     $suffix = ["", "K", "M", "B"];

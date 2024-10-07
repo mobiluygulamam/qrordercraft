@@ -48,7 +48,14 @@
                      </div>
                      <div class="order-print-divider"></div>
                      <p class="text-center">{{ ___('Thank you for visiting.') }}</p>
-                 </div>
+                     <div class="qrmenuappinfo">            
+
+                         <p class="tw-text-sm tw-text-center">craftorder.menu</p>
+                  
+                     </div>
+                    </div>
+               
+            </div>
                  <button class="button order-print-button"><i class="fa fa-print"></i> {{___('Print Receipt')}}
                  </button>
              </div>
@@ -136,7 +143,10 @@ formData.push({name: '_token', value: '{{ csrf_token() }}'});  // CSRF token ekl
                     removalDelay: 300,
                     mainClass: 'my-mfp-zoom-in'
                 }
+                
             });  
+            localStorage.removeItem('orderItems'); // Sipariş sonrası LocalStorage'ı temizle
+
                     }).catch((err) => {
                          console.error('Hata oluştu: ', err);
                     });
@@ -319,7 +329,8 @@ if (orderItems) {
 
      orderItems.forEach(function(item) {
    
-        orderHTML += `
+      if(item.quantity>0){
+          orderHTML += `
             <tr>
                 <td>${item.menu.name}`;
 
@@ -342,6 +353,7 @@ if (orderItems) {
         } else {
          
         }
+      }
     });
 }
 
@@ -363,7 +375,8 @@ orderHTML += `
             <p class="order-code-value">${order.unique_code}</p>
         </div>
     </div>
-    </div>`;
+    </div>
+    `;
 
 // Yeni HTML içeriğini sayfaya ekle
 orderContainer.innerHTML = orderHTML;

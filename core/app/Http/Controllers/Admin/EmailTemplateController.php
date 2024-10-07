@@ -148,7 +148,11 @@ class EmailTemplateController extends Controller
                     [
                         'title' => ___('Link Expire Time in Minutes'),
                         'code' => '{EXPIRY_TIME}'
-                    ]
+                    ],
+                    [
+                         'title' => ___('Invite Link'),
+                         'code' => '{INVITE_LINK}'
+                     ]
                 ]),
             ],
             [

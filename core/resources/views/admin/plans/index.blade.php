@@ -1,6 +1,7 @@
 @extends('admin.layouts.main')
 @section('title', ___('Membership Plans'))
 @section('header_buttons')
+
     <a href="#" data-url="{{ route('admin.plans.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ ___('Add New') }}</a>
 @endsection
 @section('content')

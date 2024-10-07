@@ -7,7 +7,8 @@ use App\Models\Subscriber;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
-
+use App\Http\Controllers\Admin\Mail;
+use App\Mails\InviteMail;
 class SubscriberController extends Controller
 {
 
@@ -52,11 +53,15 @@ class SubscriberController extends Controller
             $result = array('success' => false, 'message' => implode('<br>', $errors));
             return response()->json($result, 200);
         }
+        $token = Str::random(32); // 32 karakterlik rastgele bir token oluştur
 
-        Subscriber::create([
-            'email' => $request->email,
-            'joined' => Carbon::now()
-        ]);
+     //    $subscriber = Subscriber::create([
+     //          'email' => $request->email,
+     //          'joined' => Carbon::now(),  
+     //          'token' => $token, // Benzersiz token'ı kaydet
+     //          'trial_ends_at' => null // Deneme süresi henüz başlatılmadı
+     //      ]);
+      
 
         $result = array('success' => true, 'message' => ___('Created Successfully'));
         return response()->json($result, 200);
@@ -125,4 +130,10 @@ class SubscriberController extends Controller
         quick_alert_success(___('Deleted Successfully'));
         return back();
     }
+    
+
+  
+
+    
+
 }

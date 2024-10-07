@@ -24,6 +24,6 @@ class Subscriber extends Model
      */
     protected $fillable = [
         'email',
-        'joined',
+        'joined','token', 'trial_ends_at'
     ];
 }

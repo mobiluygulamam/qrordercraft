@@ -55,13 +55,13 @@ class PostController extends Controller
     public function index(Request $request)
     {
      $posts=$request->user()->posts;
-
+$isUserSubscriber=isUserSubscriber();
      $countpostsbyuserId = Post::where('user_id',$request->user()->id)->count();
 //    $group_id=$request->user()->group_id;
 
      $userpostcount = Plan::where('id', $request->user()->group_id)->value('userpostcount');
 
-        return view($this->activeTheme.'.user.posts.index',compact('userpostcount','countpostsbyuserId'));
+        return view($this->activeTheme.'.user.posts.index',compact('userpostcount','countpostsbyuserId','isUserSubscriber'));
     }
 
     /**
@@ -571,8 +571,9 @@ $postDetail=['resImageUrl'=>$resImageUrl,'title'=>$post->title, 'postid'=>$post-
     $user=request()->user();
         $plan=$user->plan();
         $qrkey=$post->title."&".$post->id;
-  
-          return view($this->activeTheme.'.user.posts.table-management',compact('id','tables','plan','post','qrkey','post'));
+     $isUserSubscriber=   isUserSubscriber();
+
+          return view($this->activeTheme.'.user.posts.table-management',compact('id','tables','plan','post','qrkey','post','isUserSubscriber'));
       }
       abort(404);
     }
@@ -1756,6 +1757,7 @@ $postDetail=['resImageUrl'=>$resImageUrl,'title'=>$post->title, 'postid'=>$post-
      */
     public function orders(Post $restaurant = null)
     {
+    $isUserSubscriber= isUserSubscriber();
         if (!$restaurant) {
             $restaurant = request()->user()->posts->first();
 
@@ -1885,7 +1887,7 @@ $postDetail=['resImageUrl'=>$resImageUrl,'title'=>$post->title, 'postid'=>$post-
             }
 
             return view($this->activeTheme.'.user.posts.orders.index',
-                compact('post', 'postOptions', 'menu_languages', 'default_menu_language', 'orders'));
+                compact('post', 'postOptions', 'menu_languages', 'default_menu_language', 'orders','isUserSubscriber'));
         }
 
         abort(404);
@@ -2354,16 +2356,7 @@ public function getOrderByTablenumber(Request $request, int $id){
          /* Send email to restaurant owner */
          if (post_options($restaurant->id, 'restaurant_send_order_notification', 1)) {
  
-             $restaurant->user->sendMail(new RestaurantOrder([
-                 'restaurant_name' => $restaurant->title,
-                 'customer_name' => $request->get('name'),
-                 'table_number' => $request->get('table_number'),
-                 'phone_number' => $request->get('phone-number'),
-                 'address' => $request->get('address'),
-                 'order_type' => $order_type,
-                 'order' => $order_msg,
-                 'message' => $request->get('message'),
-             ]));
+           
          }
  
          $result = ['success' => true, 'message' => '', 'whatsapp_url' => ''];
@@ -2587,16 +2580,7 @@ public function sendOrderTable(Request $request, Post $restaurant)
     /* Send email to restaurant owner */
     if (post_options($restaurant->id, 'restaurant_send_order_notification', 1)) {
 
-        $restaurant->user->sendMail(new RestaurantOrder([
-            'restaurant_name' => $restaurant->title,
-            'customer_name' => $request->get('name'),
-            'table_number' => $request->get('table_number'),
-            'phone_number' => $request->get('phone-number'),
-            'address' => $request->get('address'),
-            'order_type' => $order_type,
-            'order' => $order_msg,
-            'message' => $request->get('message'),
-        ]));
+      
     }
     $orderItems=$order->items;
 
@@ -2812,16 +2796,7 @@ public function sendOrderTable2(Request $request, Post $restaurant)
     /* Send email to restaurant owner */
     if (post_options($restaurant->id, 'restaurant_send_order_notification', 1)) {
 
-        $restaurant->user->sendMail(new RestaurantOrder([
-            'restaurant_name' => $restaurant->title,
-            'customer_name' => $request->get('name'),
-            'table_number' => $request->get('table_number'),
-            'phone_number' => $request->get('phone-number'),
-            'address' => $request->get('address'),
-            'order_type' => $order_type,
-            'order' => $order_msg,
-            'message' => $request->get('message'),
-        ]));
+    
     }
 
     $result = ['success' => true, 'message' => '', 'whatsapp_url' => '', 'order'=>json_encode($order),"table_id"=>$request->get('table_number'),];

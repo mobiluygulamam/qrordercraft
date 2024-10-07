@@ -26,8 +26,8 @@ class StaffController extends Controller
       
           // Tek bir dizi olarak tüm StaffMember verilerini topla
           $staffMembers = StaffMember::whereIn('restaurant_id', $posts->pluck('id'))->get();
-      
-          return view($this->activeTheme.'.user.staffs.index', compact('staffMembers'));
+      $isUserSubscriber=isUserSubscriber();
+          return view($this->activeTheme.'.user.staffs.index', compact('staffMembers','isUserSubscriber'));
       }
      public function create(Request $request)
      { 

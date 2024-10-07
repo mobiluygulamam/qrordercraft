@@ -26,7 +26,7 @@
                 <div class="col-sm-8">
                     <div class="contactUs">
                         <h2 class="margin-bottom-30">{{ ___('Contact Us') }}</h2>
-                        <form id="contact-form" class="contact-form" name="contact-form" method="post" action="{{ route('contact') }}">
+                        <form id="contact-form" class="contact-form" name="contact-form" method="post" action="{{ route('contactSend') }}">
                             @csrf
                             <div class="row">
                                 <div class="col-sm-6">

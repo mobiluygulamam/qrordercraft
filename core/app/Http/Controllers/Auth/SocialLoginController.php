@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+use Carbon\Carbon;
 
 use App\Http\Controllers\Controller;
 use App\Mails\UserDetails;
@@ -66,6 +67,9 @@ class SocialLoginController extends Controller
                     'country_code' => $ipInfo->location->country_code,
                     'oauth_uid'=> $user->getId(),
                     'oauth_provider'=> $provider,
+                    'plan_start_date'=>Carbon::now(),
+                    'plan_end_date'=>Carbon::now()->addDays(7),
+                    'payment_status'=>"Register",
                 ]);
                 $new_user->markEmailAsVerified();
 

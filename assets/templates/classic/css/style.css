@@ -49,6 +49,7 @@ header.fullwidth .container {max-width: 100%;margin: 0;padding: 0 35px }
 .header-widget .log-in-button {background-color: #f0f0f0;border-radius: 4px;height: 46px;width: 46px;text-align: center }
 .transparent-header .header-widget .log-in-button i, .transparent-header .header-widget .log-in-button {background-color: #fff;color: #333 }
 }
+
 @media (max-width: 480px) {
     .language-switcher .dropdown-toggle {padding: 0 10px !important;}
     .language-switcher .caret {display: none}
@@ -351,6 +352,7 @@ header.fullwidth .container {padding: 0 20px }
 }
 @media (max-width: 480px) {.hide-on-mobile {display: none }
 }
+
 #footer {background-color: #303030;color: silver }
 #footer p {line-height: 26px }
 .footer-top-section {border-bottom: 1px solid #484848 }

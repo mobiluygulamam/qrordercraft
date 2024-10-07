@@ -38,6 +38,7 @@ public function __construct(){
 
  function index(){
      $getUser=auth()->user();
+     $isUserSubscriber=isUserSubscriber();
      $getUserPosts=Post::where('user_id',$getUser->id)->get();
      $feedbacks=[];
      if (!$getUserPosts->isEmpty()) {
@@ -54,7 +55,7 @@ public function __construct(){
        
      }
   
-     return view($this->activeTheme.'user.feedbacks.index',compact('feedbacks'));
+     return view($this->activeTheme.'user.feedbacks.index',compact(['feedbacks','isUserSubscriber']));
 
  }
 }

@@ -21,32 +21,28 @@ class SubscribeController extends Controller
      * @return \Illuminate\Contracts\View\View
      */
     public function index()
-    {
-        $plan = request()->user()->plan();
-        $start_date = $expiry_date  =$planlastdate = '-';
-        $pay_mode = 'one_time';
-        $interval = null;
-          $user=User::where('id',request()->user()->id)->get()->first();
-          
-        if ($upgrade = request()->user()->upgrade) {
-            $start_date = date_formating($upgrade->upgrade_lasttime);
-            $expiry_date = date_formating($upgrade->upgrade_expires);
-            $pay_mode = $upgrade->pay_mode;
-            $interval = $upgrade->interval;
-          $planlastdate = $user->created_at->addDays(7);
+{
+    $plan = request()->user()->plan();
+    $start_date = $expiry_date = $planlastdate = '-';
 
-        }
-        else {
-          
-          $start_date=date_formating($user->created_at);  
-           $expiry_date = $user->created_at->addDays(7);
-          $planlastdate= date_formating(Carbon::parse($expiry_date)->diffInDays (Carbon::parse($user->created_at)));
-       
-        }
+    $user = User::where('id', request()->user()->id)->firstOrFail();
 
-        return view($this->activeTheme.'.user.subscription',
-            compact('plan', 'start_date', 'expiry_date', 'pay_mode', 'interval', 'planlastdate'));
+    // Start date ve expiry date'i doğru formatta al
+    $start_date = date_formating($user->plan_start_date);
+    $expiry_date = date_formating($user->plan_end_date);
+
+    // Gün farkını hesapla
+    if ($user->plan_start_date && $user->plan_end_date) {
+        // Carbon kütüphanesini kullanarak tarihler arasındaki gün farkını hesapla
+        $startDate = \Carbon\Carbon::parse($user->plan_start_date);
+        $endDate = \Carbon\Carbon::parse($user->plan_end_date);
+        $planlastdate = $startDate->diffInDays($endDate);
     }
+
+    return view($this->activeTheme . '.user.subscription', 
+        compact('plan', 'start_date', 'expiry_date', 'planlastdate'));
+}
+
 
     /**
      * Cancel recurring subscription

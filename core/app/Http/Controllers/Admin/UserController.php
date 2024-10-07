@@ -17,8 +17,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use App\Models\Post;
+use App\Mails\NewPlanMail;
 
-
+use Illuminate\Support\Facades\Mail;
 class UserController extends Controller
 {
     /**
@@ -482,18 +483,29 @@ return view('blank');
                 'upgrade_expires' => strtotime($request->plan_expiration_date),
                 'status' => Upgrade::STATUS_ACTIVE,
             ]);
+           
         }
+        $plan=Plan::where('id',$request->plan)->first();
+        $validPeriod=$plan->validity_period;
 
         /* Update user group */
         $user->update([
             'group_id' => $request->plan,
+            'plan_start_date' => Carbon::now(),
+   'plan_end_date' => Carbon::now()->addDays($validPeriod),
+     'last_payment_date' => Carbon::now()->addDays($validPeriod),
+     'next_payment_due' => Carbon::now()->addDays($validPeriod),
+            'payment_status' => "Ödendi",
         ]);
+    
+Mail::to($user->email)->send(new NewPlanMail($user));
 
         UserOption::updateUserOption($user->id, 'package_trial_done', $request->package_trial_done);
+        quick_alert_success(___('Updated successfully ' ));
 
-        quick_alert_success(___('Updated successfully'));
         return back();
     }
+
 
     /**
      * Login as user

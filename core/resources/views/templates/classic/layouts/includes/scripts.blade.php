@@ -36,6 +36,7 @@
 
 <link rel="stylesheet" href="{{ asset($activeThemeAssets.'css/alertify.css') }}">
 <script src="{{ asset($activeThemeAssets.'js/alertify.min.js') }}"></script>
+<script src="https://cdn.popupsmart.com/bundle.js" data-id="897214" async defer></script>
 
 @stack('scripts_vendor')
 <!--Custom JS-->
